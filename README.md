@@ -59,25 +59,17 @@
 - 不需要任何外部圖檔，圖都是 TikZ 直接畫的。
 - 目前的結果：**6 頁**，log 裡沒有錯誤、未定義引用或 Overfull 警告。
 
-## 同步流程
+## 版本管理
 
-本機資料夾同時連著 Overleaf 專案 AIoT_DIC4（透過 [olcli](https://www.npmjs.com/package/olcli)）和這個 GitHub repo。
+論文在 Overleaf 上編譯，原始檔用這個 GitHub repo 管理。commit 時只加入論文相關的檔案：
 
 ```bash
-# Overleaf：上傳、編譯、檢查 log
-olcli push                         # 上傳論文原始檔（依 .olignore 排除其他檔案）
-olcli pdf -o nutriagent.pdf        # 在 Overleaf 編譯並下載 PDF
-olcli output log -o output.log     # 下載編譯 log
-grep -nE "^!|undefined|Overfull" output.log   # 沒有輸出就代表乾淨
-olcli diff                         # 確認本機與 Overleaf 內容一致
-
-# GitHub：只 commit 指定的檔案
 git add main.tex references.bib sections figures tables
 git commit -m "..."
 git push
 ```
 
-`myRef/`（專題參考資料）和 `.claude/` 已用 `.gitignore` 排除，不會推上 GitHub。`openspec/` 和 README 會推上 GitHub，但不會上傳到 Overleaf。
+`myRef/`（專題參考資料）和 `.claude/` 已用 `.gitignore` 排除，不會推上 GitHub。
 
 ## 研討會資訊（參考）
 
