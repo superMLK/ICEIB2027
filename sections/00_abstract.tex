@@ -6,23 +6,21 @@
 \begin{abstract}
 More people now ask chatbots whether a meal suits their health, yet large
 language models (LLMs) report nutrition numbers unreliably, which is risky for
-people with hypertension, prediabetes, or kidney disease. Health-aware
-recommenders, meanwhile, treat health as a tradable objective, and wearable
-energy estimates carry large errors. This paper proposes NutriAgent, a grounded
-conversational agent for eating-out decisions that combines clinical nutrition
-rules, wearable IoT data, and Google Gemini. A Planner coordinates eight
-modules: it parses intents and context from the chat, computes an
-activity-aware meal budget with a damped dynamic energy expenditure, retrieves
-walkable meals, and applies a deterministic clinical and allergen gate before
-any LLM call. A hybrid ranker then combines a local preference model with
-Gemini semantic scores on the safe pool only, and every number in the LLM reply
-is checked against the database, with a template reply as fallback. The
-evaluation design uses 50 synthetic clinical profiles, a database of at least
-200 Taiwanese meals, a Chinese dialogue set, and five baselines including a
-Gemini zero-shot recommender. An offline functional check of the prototype on
-45 evaluations showed no clinical or allergen violations, a calorie error of
-114.48\,kcal, and sub-millisecond latency; we expect the full evaluation to
-keep violations at zero with or without the LLM.
+people with hypertension, prediabetes, or kidney disease. This paper proposes
+NutriAgent, a grounded conversational agent for eating-out decisions that
+combines clinical nutrition rules, wearable IoT data, and Google Gemini. A
+Planner parses intents from the chat, computes an activity-aware meal budget
+with damped wearable energy, retrieves walkable meals, and applies a
+deterministic clinical and allergen gate before any LLM call. A hybrid ranker
+then combines a local preference model with Gemini scores on the safe pool
+only, and every number in the LLM reply is checked against the database, with a
+template reply as fallback. The evaluation design uses 50 synthetic clinical
+profiles, at least 200 Taiwanese meals, a Chinese dialogue set, and five
+baselines, including a Gemini zero-shot recommender. An offline functional
+check of the prototype on 45 evaluations showed no clinical or allergen
+violations, a calorie error of 114.48\,kcal, and sub-millisecond latency; we
+expect the full evaluation to keep violations at zero with or without the
+LLM.
 \end{abstract}
 
 \begin{IEEEkeywords}

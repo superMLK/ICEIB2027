@@ -6,15 +6,6 @@
 \section{Proposed Scheme}
 \label{sec:proposed_scheme}
 
-\begin{figure*}[t]
-    \centering
-    \input{figures/architecture}
-    \caption{System architecture of NutriAgent. The Planner (3) orchestrates
-    eight modules; the deterministic gate (6) runs before any LLM call, so
-    Gemini only sees the safe candidate pool.}
-    \label{fig:architecture}
-\end{figure*}
-
 \subsection{Problem Formulation}
 Given a natural-language message $M$, health metrics $H$, a set of declared
 allergens $A$, a location $\ell$, a meal time $t$, and today's activity $x$,
@@ -103,7 +94,8 @@ the safe pool is empty, the rules are never relaxed: the agent returns
 NO\_COMPLIANT\_MEAL with suggestions on how to order more safely.
 
 \begin{algorithm}[t]
-    \caption{Clinical and Allergen Hard-Constraint Gate}
+    \caption{Clinical and Allergen Hard-Constraint Gate
+        (Na in mg; sugar and saturated fat in g)}
     \label{alg:gate}
     \begin{algorithmic}[1]
         \Require candidates $C$, health metrics $H$, allergens $A$
@@ -113,27 +105,26 @@ NO\_COMPLIANT\_MEAL with suggestions on how to order more safely.
             \Comment{TFDA-11}
         \For{each meal $m \in C$}
             \State $R \gets \emptyset$
-            \If{$m.\mathit{allergens} \cap \hat{A} \neq \emptyset$}
+            \If{$\mathit{allergens}_m \cap \hat{A} \neq \emptyset$}
                 \State $R \gets R \cup \{\textsc{Allergen}\}$
             \EndIf
-            \If{$\mathit{SBP} \ge 130$ \textbf{or} $\mathit{DBP} \ge 85$}
-                \If{$m.\mathit{Na} > 700$\,mg \textbf{or} $m$ is deep-fried}
-                    \State $R \gets R \cup \{\textsc{HTN}\}$
-                \EndIf
+            \If{$(\mathit{SBP}{\ge}130 \lor \mathit{DBP}{\ge}85) \land
+                (\mathit{Na}_m{>}700 \lor \mathit{fried}_m)$}
+                \State $R \gets R \cup \{\textsc{HTN}\}$
             \EndIf
-            \If{$\mathit{FPG} \ge 100$ \textbf{and}
-                ($m.\mathit{GI}$ high \textbf{or} $m.\mathit{sugar} > 5$\,g)}
+            \If{$\mathit{FPG}{\ge}100 \land
+                (\mathit{GI}_m{=}\mathrm{high} \lor \mathit{sugar}_m{>}5)$}
                 \State $R \gets R \cup \{\textsc{Prediabetes}\}$
             \EndIf
-            \If{$\mathit{UA} \ge 7.0$ \textbf{and} $m.\mathit{purine}$ high}
+            \If{$\mathit{UA}{\ge}7.0 \land \mathit{purine}_m{=}\mathrm{high}$}
                 \State $R \gets R \cup \{\textsc{Gout}\}$
             \EndIf
-            \If{$\mathit{LDL} \ge 130$ \textbf{and}
-                ($m.\mathit{satfat} > 5$\,g \textbf{or} fried)}
+            \If{$\mathit{LDL}{\ge}130 \land
+                (\mathit{satfat}_m{>}5 \lor \mathit{fried}_m)$}
                 \State $R \gets R \cup \{\textsc{LDL}\}$
             \EndIf
-            \If{$\mathit{eGFR} < 60$ \textbf{and}
-                ($m.\mathit{K}$ high \textbf{or} $m.\mathit{P}$ high)}
+            \If{$\mathit{eGFR}{<}60 \land
+                (\mathit{K}_m{=}\mathrm{high} \lor \mathit{P}_m{=}\mathrm{high})$}
                 \State $R \gets R \cup \{\textsc{CKD}\}$
             \EndIf
             \If{$R = \emptyset$}

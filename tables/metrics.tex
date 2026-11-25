@@ -8,30 +8,23 @@
     \label{tab:metrics}
     \footnotesize
     \setlength{\tabcolsep}{3pt}
-    \begin{tabular}{@{}p{1.75cm}p{4.65cm}p{1.45cm}@{}}
+    \begin{tabular}{@{}p{1.75cm}p{4.55cm}p{1.55cm}@{}}
         \toprule
         Metric & Definition & Target \\
         \midrule
-        CVR & recommendations violating a clinical rule / all recommendations
-            & 0\% (with or without LLM) \\
-        AVR & recommendations containing a declared allergen / all
+        CVR & share of recommendations violating a clinical rule
             & 0\% \\
-        Grounding rate & numbers in the reply that match the database, measured
-            for raw Gemini output and for the final reply & 100\% (final) \\
-        Intent accuracy & correct intent and context (place, time, activity,
-            allergen) on the labeled dialogue set & $\ge 90$\% \\
+        AVR & share containing a declared allergen & 0\% \\
+        Grounding rate & reply numbers matching the database (raw and final)
+            & 100\% (final) \\
+        Intent accuracy & correct intent and context on the dialogue set & $\ge 90$\% \\
         Calorie MAE & $\frac{1}{N}\sum |\text{kcal} - B_t|$ over recommendations
             & $\le 180$\,kcal \\
-        Latency & offline engine per request; end-to-end with Gemini (P50/P95)
-            & $\le 50$\,ms; P95 $\le 5$\,s \\
-        Fallback rate & replies falling back to the template (timeout, error,
-            mismatch) & reported \\
-        Position consistency & top-3 overlap over five shuffled orders of the
-            same candidates & reported \\
-        Convergence & interactions until top-1 matches a changed preference
-            & $\le 5$ \\
-        User study & adoption rate, SUS, perceived clarity (5-point Likert)
-            & SUS $\ge 68$ \\
+        Latency & offline engine; end-to-end with Gemini & $\le$50\,ms; P95 $\le$5\,s \\
+        Fallback rate & replies falling back to the template & reported \\
+        Position consist. & top-3 overlap over five shuffled orders & reported \\
+        Convergence & turns until top-1 follows a new preference & $\le 5$ \\
+        User study & adoption, SUS, clarity (Likert) & SUS $\ge 68$ \\
         \bottomrule
     \end{tabular}
 \end{table}

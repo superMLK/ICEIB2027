@@ -9,17 +9,14 @@
 \label{sec:experiments}
 
 \subsection{Experimental Setup}
-The evaluation is designed around three datasets. First, 50 synthetic clinical
-profiles, ten each for hypertension, prediabetes, gout, high activity, and
-healthy controls, include eGFR so that the CKD rule is exercised. Second, a
-Taiwanese eating-out database of at least 200 meals is compiled from the public
-nutrition labels of convenience stores and bento chains and extended with
-coordinates, glycemic index, purine, potassium and phosphorus levels, and
-allergens. Third, a Chinese dialogue set of at least 200 utterances is labeled
-with intents and contexts, including recommendations, feedback, questions about
-rejected meals, and colloquial allergen declarations. Five case studies cover
-the lunch scenario of Section~\ref{sec:proposed_scheme}, a post-exercise
-dinner, an area with no compliant meal, multiple allergies, and a Gemini outage.
+The evaluation uses three datasets: 50 synthetic clinical profiles (ten each
+for hypertension, prediabetes, gout, high activity, and healthy controls, with
+eGFR to exercise the CKD rule); at least 200 Taiwanese eating-out meals from the
+public labels of convenience stores and bento chains, extended with
+coordinates, glycemic index, purine, potassium, phosphorus, and allergens; and
+at least 200 Chinese utterances labeled with intents and contexts. Case studies
+cover a post-exercise dinner, an area with no compliant meal, multiple
+allergies, and a Gemini outage.
 
 \subsection{Baselines}
 Five baselines isolate the contribution of each component:
@@ -65,31 +62,22 @@ baseline B3 will show non-zero violations, and we target a calorie MAE of at
 most 180\,kcal. These are hypotheses to be tested, not observed results.
 
 \subsection{Discussion}
-\emph{Can an LLM give dietary advice and numbers directly?} Optimistic evidence
-shows LLM estimates close to those of dietitians~\cite{dhaliwal2025nutribench}
-and gains from knowledge grounding~\cite{mohbat2025kerl}, whereas cautious
-evidence shows systematic sodium underestimation~\cite{hsuan2025mealbox},
-renal diets with excess potassium~\cite{aydincil2026renal}, and position
-bias~\cite{hou2024llmrank}. The consensus is to use the LLM as an interface
-with grounded numbers; NutriAgent therefore keeps every safety decision outside
-the LLM.
-
-\emph{Can consumer wearable energy data drive dietary decisions?} Heart rate is
-fairly accurate~\cite{shcherbina2017wrist} and wearable feedback can change
-behavior~\cite{lee2025pearl}, but energy expenditure errors exceed
-30\%~\cite{germini2022wearable}. Wearables suit activity levels and trends
-rather than one-to-one compensation, which motivates the damping and the cap in
-\eqref{eq:tdee} and \eqref{eq:budget}.
-
-\emph{Should potassium and phosphorus be restricted for all CKD patients?}
-KDIGO 2024 recommends individualizing potassium by kidney function and serum
-potassium~\cite{kdigo2024ckd}, yet LLM-generated renal diets already exceed safe
-limits~\cite{aydincil2026renal}. Without serum potassium data, NutriAgent adopts
-the conservative rule, at the cost of excluding some beneficial vegetables, and
-advises users to confirm their targets with a dietitian.
-
-The system is not a medical device, and its safety guarantee holds only if the
-label data are correct. When Gemini is enabled, health data are sent to an
-external API, so a production version should send only derived flags (e.g.,
-``sodium restricted'') with explicit consent, while the offline mode keeps all
-data on the device.
+\emph{Can an LLM give dietary numbers directly?} LLM estimates can approach
+those of dietitians~\cite{dhaliwal2025nutribench} and improve with knowledge
+grounding~\cite{mohbat2025kerl}, yet they underestimate
+sodium~\cite{hsuan2025mealbox}, exceed potassium limits in renal
+diets~\cite{aydincil2026renal}, and show position bias~\cite{hou2024llmrank}.
+NutriAgent therefore uses the LLM as an interface and keeps every safety
+decision and number outside it.
+\emph{Can wearable energy data drive dietary decisions?} Heart rate is fairly
+accurate~\cite{shcherbina2017wrist}, but energy errors exceed
+30\%~\cite{germini2022wearable}; wearables suit activity trends rather than
+one-to-one compensation, hence the damping and cap in \eqref{eq:tdee} and
+\eqref{eq:budget}.
+\emph{Should potassium be restricted for all CKD patients?} KDIGO 2024
+individualizes it~\cite{kdigo2024ckd}; without serum potassium data, NutriAgent
+keeps the conservative rule, at the cost of excluding some beneficial
+vegetables, and advises users to confirm their targets with a dietitian.
+Finally, the system is not a medical device, its guarantee assumes correct
+labels, and with Gemini enabled a production version should send only derived
+flags with explicit consent, while the offline mode keeps data on the device.

@@ -6,6 +6,17 @@
 \section{Introduction}
 \label{sec:introduction}
 
+% Fig. 1 is defined here so that it floats to the top of page 2
+% (a figure* can only appear on a page after the one where it is defined).
+\begin{figure*}[t]
+    \centering
+    \input{figures/architecture}
+    \caption{System architecture of NutriAgent. The Planner (3) orchestrates
+    eight modules; the deterministic gate (6) runs before any LLM call, so
+    Gemini only sees the safe candidate pool.}
+    \label{fig:architecture}
+\end{figure*}
+
 % G: General
 Eating out is part of daily life for most adults in Taiwan. A 2025 survey of
 1{,}000 office workers aged 22--65 found that nearly 70\% eat out regularly and
@@ -46,16 +57,14 @@ gate runs before any LLM call, so the LLM only sees a safe candidate pool and
 safety comes from the architecture rather than from prompts. The main
 contributions are as follows.
 \begin{itemize}
-    \item A grounded agent architecture in which rules own safety and numbers and
-    the LLM owns language, presented with an architecture diagram, a flowchart,
-    and two algorithms.
+    \item A grounded agent architecture in which rules own safety and numbers
+    and the LLM owns language.
     \item An auditable rule base covering the AHA/ACC, ADA, ACR, and KDIGO
-    guidelines and the 11 allergen categories required on Taiwanese food labels.
+    guidelines and Taiwan's 11 mandatory allergen categories.
     \item A numeric verification and fallback mechanism for LLM replies, with
-    the grounding rate and fallback rate defined as evaluation metrics.
-    \item An evaluation design with synthetic clinical profiles, a Taiwanese
-    eating-out database, a Chinese dialogue set, five baselines, and a working
-    prototype with a preliminary functional check.
+    grounding and fallback rates as metrics.
+    \item An evaluation design with five baselines and a working prototype with
+    a preliminary functional check.
 \end{itemize}
 
 % L: Organization

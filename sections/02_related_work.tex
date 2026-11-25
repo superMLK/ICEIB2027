@@ -23,10 +23,9 @@ learning and Pareto optimization, and explains results with an
 LLM~\cite{zhang2025mopihfrs}. MORL-A2C adds an actor-critic reranker that raises
 the health score H-Score@20 from 46.05\% to 69.57\% while Recall@20 drops from
 25.64\% to 23.61\%~\cite{vasantlal2026morla2c}: when health is a reward term,
-it is traded against accuracy. KERL grounds an LLM in a food knowledge graph to
-satisfy dietary constraints~\cite{mohbat2025kerl}, and personal causal graphs
-help an LLM lower post-meal glucose in counterfactual
-evaluation~\cite{yang2025causalgraph}. These systems target recipes and offline
+it is traded against accuracy. KERL grounds an LLM in a food knowledge graph~\cite{mohbat2025kerl}, and
+personal causal graphs help an LLM lower post-meal
+glucose~\cite{yang2025causalgraph}; all of these target recipes and offline
 evaluation rather than purchasable meals.
 
 \subsection{LLM Nutrition Estimation}
@@ -49,11 +48,9 @@ conditionally recommends limiting purines~\cite{fitzgerald2020gout}; and KDIGO
 On the device side, wrist-worn trackers estimate energy expenditure with errors
 above 30\%~\cite{germini2022wearable,shcherbina2017wrist}, and the Google Fit
 APIs are being retired in 2026 in favor of Health
-Connect~\cite{android2025fitmigration}. Contextual bandits are a common tool
-for just-in-time mobile health~\cite{lei2017actorcritic,svihrova2025bandits};
-in a randomized trial with 13{,}463 participants, PEARL added 296 daily steps
-over the control group in the first month~\cite{lee2025pearl}, and guarded offline RL keeps treatment
-policies within clinically safe regions~\cite{yan2025ogsrl}.
+Connect~\cite{android2025fitmigration}. In a randomized trial with 13{,}463
+participants, the contextual-bandit coach PEARL added 296 daily steps over the
+control group in the first month~\cite{lee2025pearl}.
 
 Table~\ref{tab:related} summarizes the gap: no existing approach lets rules
 own safety and numbers while an LLM owns language, combines live wearable

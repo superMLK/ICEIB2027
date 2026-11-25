@@ -1,0 +1,12 @@
+# 不上傳到 Overleaf 的檔案（語法同 .gitignore）
+myRef/
+openspec/
+.claude/
+README.md
+overleafInstruction.md
+.olignore
+.gitignore
+.gitkeep
+*.pdf
+*.pptx
+*.docx

@@ -12,33 +12,26 @@
     \label{tab:prototype}
     \footnotesize
     \setlength{\tabcolsep}{3pt}
-    \begin{tabular}{@{}p{3.3cm}p{2.3cm}p{2.25cm}@{}}
+    \begin{tabular}{@{}p{3.75cm}p{2.05cm}p{2.05cm}@{}}
         \toprule
         \multicolumn{3}{@{}l}{\textit{(a) Functional check}} \\
         Item & Offline check & Target \\
         \midrule
         CVR / AVR & 0.0\% / 0.0\% & 0\% \\
         Calorie MAE & 114.48\,kcal & $\le 180$\,kcal \\
-        Mean / P95 latency & 0.08 / 0.18\,ms (no LLM) & $\le 50$\,ms \\
+        Mean / P95 latency (no LLM) & 0.08 / 0.18\,ms & $\le 50$\,ms \\
         Automated tests & 9 / 9 passed & --- \\
         \midrule
         \multicolumn{3}{@{}l}{\textit{(b) Implementation status}} \\
         Component & Status & Planned change \\
         \midrule
-        Gate, budget, retrieval, offline ranking, template reply
-            & implemented & --- \\
-        Gemini semantic scores and grounded reply
-            & implemented & --- \\
-        Numeric check of the Gemini reply (Alg.~\ref{alg:rank})
-            & planned & first priority \\
-        Intent parsing by Gemini (JSON schema)
-            & keyword rules & rules as fallback \\
-        Shuffled scoring with response schema
-            & not yet & as in Sec.~\ref{sec:proposed_scheme} \\
-        CKD rule data (eGFR, K/P levels)
-            & fields missing & add to datasets \\
-        End-to-end latency with Gemini
-            & not measured & P50/P95 \\
+        Gate, budget, retrieval, template reply & implemented & --- \\
+        Gemini scores and reply & implemented & --- \\
+        Numeric check of Gemini reply & planned & first priority \\
+        Intent parsing by Gemini & keyword rules & rules as fallback \\
+        Shuffled, schema-bound scoring & not yet & as in Sec.~\ref{sec:proposed_scheme} \\
+        CKD data (eGFR, K/P levels) & fields missing & add to datasets \\
+        Latency with Gemini & not measured & P50/P95 \\
         \bottomrule
     \end{tabular}
 \end{table}

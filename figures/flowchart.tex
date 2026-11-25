@@ -1,41 +1,41 @@
 % ==========================================
-% Fig. 2 — NutriAgent processing flow (TikZ, single column)
+% Fig. 2 - NutriAgent processing flow (TikZ, single column)
 % Included by sections/03_proposed_scheme.tex inside a figure environment.
 % Main path runs top to bottom; exception branches go right,
 % the preference-update branch and the human-in-the-loop return go left.
 % Styles (na/...) and colours (na...) are defined in main.tex.
 % ==========================================
 \begin{tikzpicture}[
-    node distance=2.2mm and 4mm,
-    proc/.style={na/box=#1, text width=3.1cm, minimum height=0.5cm},
-    side/.style={na/box=#1, text width=1.95cm, minimum height=0.5cm},
-    ask/.style={na/decision, aspect=3, inner sep=0pt},
+    node distance=1.7mm and 3.5mm,
+    proc/.style={na/box=#1, text width=3.3cm, minimum height=0.42cm},
+    side/.style={na/box=#1, text width=1.95cm, minimum height=0.42cm},
+    ask/.style={na/decision, aspect=4.2, inner sep=0pt},
     yes/.style={na/label, text=black!70},
   ]
 
   % ---------- Main path ----------
-  \node[na/io, text width=2.9cm] (in) {Input: message + profile,\\ allergens, location, activity};
-  \node[proc=naViolet, below=of in] (plan) {Planner: intent parsing +\\ context override (allergens add-only)};
-  \node[ask, below=of plan] (fb) {Feedback\\ intent?};
-  \node[ask, below=of fb] (iot) {Wearable\\ data OK?};
-  \node[proc=naGreen, below=of iot] (tdee) {Plausibility check $\rightarrow$ dynamic\\ TDEE $\rightarrow$ meal budget};
+  \node[na/io, text width=3.0cm] (in) {Input: message + profile context};
+  \node[proc=naViolet, below=of in] (plan) {Planner: intent + context override};
+  \node[ask, below=of plan] (fb) {Feedback intent?};
+  \node[ask, below=of fb] (iot) {Wearable data OK?};
+  \node[proc=naGreen, below=of iot] (tdee) {Plausibility check $\rightarrow$ budget $B_t$};
   \node[proc=naGreen, below=of tdee] (lbs) {Haversine retrieval, 1.2\,km};
-  \node[ask, below=of lbs] (cnt) {Candidates\\ $\ge 4$?};
-  \node[proc=naRed, below=of cnt] (gate) {Clinical \& allergen gate\\ (Algorithm~\ref{alg:gate})};
-  \node[ask, below=of gate] (empty) {Safe pool\\ empty?};
-  \node[ask, below=of empty] (avail) {Gemini\\ available?};
-  \node[proc=naOrange, below=of avail] (rank) {Hybrid ranking $\rightarrow$ Top-3};
-  \node[proc=naOrange, below=of rank] (reply) {Grounded reply\\ (Gemini or template)};
-  \node[ask, below=of reply] (match) {Numbers\\ = DB?};
-  \node[na/io, text width=2.9cm, below=of match] (out) {Output: reply + trace\\ + Top-3 cards};
+  \node[ask, below=of lbs] (cnt) {$\ge 4$ candidates?};
+  \node[proc=naRed, below=of cnt] (gate) {Clinical \& allergen gate (Alg.~\ref{alg:gate})};
+  \node[ask, below=of gate] (empty) {Safe pool empty?};
+  \node[ask, below=of empty] (avail) {Gemini available?};
+  \node[proc=naOrange, below=of avail] (rank) {Hybrid ranking $\rightarrow$ top-3};
+  \node[proc=naOrange, below=of rank] (reply) {Grounded reply (LLM or template)};
+  \node[ask, below=of reply] (match) {Numbers = DB?};
+  \node[na/io, text width=3.0cm, below=of match] (out) {Output: reply + trace + cards};
 
   % ---------- Branch nodes ----------
-  \node[side=naBlue, left=of fb] (upd) {Update weights $w$\\ (Eq.~\eqref{eq:pref})};
-  \node[side=naRed, right=of iot] (low) {Static estimate,\\ flag LOW\_CONF};
-  \node[side=naGreen, right=of cnt] (expand) {Expand radius to\\ 2.5\,km (once)};
+  \node[side=naBlue, left=of fb] (upd) {Update $w$ by \eqref{eq:pref}};
+  \node[side=naRed, right=of iot] (low) {Static estimate, LOW\_CONF};
+  \node[side=naGreen, right=of cnt] (expand) {Expand to 2.5\,km once};
   \node[side=naRed, right=of empty] (none) {{\tiny NO\_COMPLIANT\_MEAL}\\ + ordering tips};
-  \node[side=naOrange, right=of avail] (sem) {Gemini scores\\ (shuffled, JSON)};
-  \node[side=naRed, right=of match] (tmpl) {Fall back to\\ template reply};
+  \node[side=naOrange, right=of avail] (sem) {Gemini scores (shuffled)};
+  \node[side=naRed, right=of match] (tmpl) {Template reply};
 
   % ---------- Main flow arrows ----------
   \draw[na/flow] (in) -- (plan);
@@ -63,7 +63,7 @@
   \draw[na/flow] (expand) |- (gate);
 
   \draw[na/flow] (empty) -- node[yes, above] {yes} (none);
-  \draw[na/flow] (none.east) -- ++(0.18,0) |- (out.east);
+  \draw[na/flow] (none.east) -- ++(0.15,0) |- (out.east);
 
   \draw[na/flow] (avail) -- node[yes, above] {yes} (sem);
   \draw[na/flow] (sem) |- (rank);
@@ -72,6 +72,7 @@
   \draw[na/flow] (tmpl) |- (out);
 
   % ---------- Human-in-the-loop return ----------
-  \draw[na/flow, naBlue, densely dashed] (out.west) -- (out.west -| upd.west) -- ++(-0.25,0) |- (in.west)
+  \draw[na/flow, naBlue, densely dashed] (out.west) -- (out.west -| upd.west)
+    -- ++(-0.2,0) |- (in.west)
     node[na/label, pos=0.25, rotate=90, above, text=naBlue] {next message (human in the loop)};
 \end{tikzpicture}
