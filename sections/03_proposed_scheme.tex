@@ -1,0 +1,56 @@
+% ==========================================
+% III. Proposed Scheme (~1.8 pages)
+% Logic: Architecture -> Mathematical model -> Algorithms
+% Key question: What is your innovation? How does it work?
+% ==========================================
+\section{Proposed Scheme}
+\label{sec:proposed_scheme}
+
+\subsection{System Architecture}
+Fig.~\ref{fig:architecture} shows the overall architecture of the proposed
+scheme, which consists of the sensing layer, the network layer, and the
+application layer.
+
+\begin{figure}[htbp]
+    \centering
+    % Replace the placeholder with your own figure, e.g.:
+    % \includegraphics[width=\columnwidth]{architecture.pdf}
+    \includegraphics[width=\columnwidth]{example-image-a}
+    \caption{Overall architecture of the proposed scheme.}
+    \label{fig:architecture}
+\end{figure}
+
+\subsection{Mathematical Model}
+Let $\mathcal{D} = \{(\mathbf{x}_i, y_i)\}_{i=1}^{N}$ denote the dataset,
+where $\mathbf{x}_i \in \mathbb{R}^{d}$ is the feature vector and $y_i$ is
+the target value. Each feature is normalized by min--max scaling:
+\begin{equation}
+    x' = \frac{x - x_{\min}}{x_{\max} - x_{\min}}.
+    \label{eq:minmax}
+\end{equation}
+The model $f_{\theta}$ is trained by minimizing the mean squared error:
+\begin{equation}
+    \theta^{*} = \arg\min_{\theta} \frac{1}{N} \sum_{i=1}^{N}
+    \left( y_i - f_{\theta}(\mathbf{x}_i) \right)^{2}.
+    \label{eq:objective}
+\end{equation}
+
+\subsection{Algorithm}
+Algorithm~\ref{alg:proposed} summarizes the procedure of the proposed scheme.
+
+\begin{algorithm}[htbp]
+    \caption{Proposed Scheme}
+    \label{alg:proposed}
+    \begin{algorithmic}[1]
+        \Require Dataset $\mathcal{D}$, candidate hyperparameters $\Theta$
+        \Ensure Trained model $f_{\theta^{*}}$
+        \State Remove missing values and outliers from $\mathcal{D}$
+        \State Normalize $\mathcal{D}$ using \eqref{eq:minmax}
+        \State Split $\mathcal{D}$ into $\mathcal{D}_{\mathrm{train}}$ and $\mathcal{D}_{\mathrm{val}}$
+        \For{each $\theta \in \Theta$}
+            \State Train $f_{\theta}$ on $\mathcal{D}_{\mathrm{train}}$ by \eqref{eq:objective}
+            \State Evaluate $f_{\theta}$ on $\mathcal{D}_{\mathrm{val}}$
+        \EndFor
+        \State \Return the model $f_{\theta^{*}}$ with the lowest validation error
+    \end{algorithmic}
+\end{algorithm}

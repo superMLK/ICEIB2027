@@ -1,7 +1,18 @@
 % =====================================================================
-%  參考文獻資料庫
-%  在 main.tex 用 \cite{key} 引用；沒被引用的條目不會出現在文末清單
-%  Google Scholar 每篇論文下方的「引用 → BibTeX」可以直接複製格式
+%  References (BibTeX)
+%  Cite with \cite{key} in sections/*.tex. Uncited entries are not listed.
+%  Tip: Google Scholar -> "Cite" -> "BibTeX" gives a ready-to-paste entry.
+%
+%  Note: BibTeX ignores "%" comments, so never write an "at" sign before
+%  an entry type inside a comment, or BibTeX will try to parse it.
+%  Example for a website / dataset (copy, then add the "at" sign):
+%    misc{dataset2027,
+%      author       = {{Data Provider}},
+%      title        = {Dataset Name},
+%      howpublished = {\url{https://example.com}},
+%      note         = {Accessed: Mar. 1, 2027},
+%      year         = {2027}
+%    }
 % =====================================================================
 
 @article{atzori2010iot,
@@ -42,12 +53,3 @@
   pages   = {2825--2830},
   year    = {2011}
 }
-
-% 網站或資料集的寫法範例：
-% @misc{dataset2024,
-%   author       = {{資料提供單位}},
-%   title        = {資料集名稱},
-%   howpublished = {\url{https://example.com}},
-%   note         = {Accessed: Nov. 25, 2026},
-%   year         = {2024}
-% }

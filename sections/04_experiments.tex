@@ -1,0 +1,43 @@
+% ==========================================
+% IV. Experiments and Discussion (~1.65 pages)
+% Logic: Datasets -> Baselines -> Metrics -> Results -> Discussion
+% Key question: How do you demonstrate its effectiveness?
+% ==========================================
+\section{Experiments and Discussion}
+\label{sec:experiments}
+
+\subsection{Datasets}
+Describe the data source, collection period, number of samples, features,
+and train/test split.
+
+\subsection{Baselines}
+List the methods compared against the proposed scheme, e.g., linear
+regression and random forest~\cite{breiman2001rf}.
+
+\subsection{Evaluation Metrics}
+The prediction performance is measured by the root mean square error (RMSE):
+\begin{equation}
+    \mathrm{RMSE} = \sqrt{\frac{1}{N} \sum_{i=1}^{N} \left( y_i - \hat{y}_i \right)^{2}},
+    \label{eq:rmse}
+\end{equation}
+where $y_i$ and $\hat{y}_i$ are the actual and predicted values, respectively.
+
+\subsection{Results}
+Table~\ref{tab:comparison} compares the proposed scheme with the baselines.
+Fig.~\ref{fig:results} visualizes the prediction results.
+
+\input{tables/comparison}
+
+\begin{figure*}[htbp]
+    \centering
+    \includegraphics[width=0.48\textwidth]{example-image-b}
+    \hfill
+    \includegraphics[width=0.48\textwidth]{example-image-c}
+    \caption{Experimental results: (left) actual versus predicted values;
+    (right) distribution of prediction errors.}
+    \label{fig:results}
+\end{figure*}
+
+\subsection{Discussion}
+Explain why the proposed scheme performs better (or worse) in certain cases,
+analyze the limitations, and discuss practical implications.
