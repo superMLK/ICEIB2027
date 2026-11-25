@@ -1,16 +1,31 @@
 % ==========================================
-% Abstract (~0.3 page, 150--250 words)
-% Tell the whole research story: problem -> method -> results -> significance.
-% No citations, figures, or equations in the abstract.
+% Abstract (A2Z: A-F, 150-250 words, no citations, figures or equations)
+% A attention getter -> B but -> C cure -> D development ->
+% E experiments -> F findings
 % ==========================================
 \begin{abstract}
-\textbf{[Problem]} State the problem addressed in this paper and why it matters.
-\textbf{[Method]} Briefly describe the proposed scheme and what makes it different.
-\textbf{[Results]} Report the key quantitative results, e.g., ``the proposed
-method reduces the RMSE by 00.0\% compared with the best baseline.''
-\textbf{[Significance]} Summarize the implication of the findings.
+More people now ask chatbots whether a meal suits their health, yet large
+language models (LLMs) report nutrition numbers unreliably, which is risky for
+people with hypertension, prediabetes, or kidney disease. Health-aware
+recommenders, meanwhile, treat health as a tradable objective, and wearable
+energy estimates carry large errors. This paper proposes NutriAgent, a grounded
+conversational agent for eating-out decisions that combines clinical nutrition
+rules, wearable IoT data, and Google Gemini. A Planner coordinates eight
+modules: it parses intents and context from the chat, computes an
+activity-aware meal budget with a damped dynamic energy expenditure, retrieves
+walkable meals, and applies a deterministic clinical and allergen gate before
+any LLM call. A hybrid ranker then combines a local preference model with
+Gemini semantic scores on the safe pool only, and every number in the LLM reply
+is checked against the database, with a template reply as fallback. The
+evaluation design uses 50 synthetic clinical profiles, a database of at least
+200 Taiwanese meals, a Chinese dialogue set, and five baselines including a
+Gemini zero-shot recommender. An offline functional check of the prototype on
+45 evaluations showed no clinical or allergen violations, a calorie error of
+114.48\,kcal, and sub-millisecond latency; we expect the full evaluation to
+keep violations at zero with or without the LLM.
 \end{abstract}
 
 \begin{IEEEkeywords}
-Internet of Things, data analytics, machine learning, keyword four, keyword five
+AI agent, large language model, grounded generation, wearable IoT,
+medical nutrition therapy, conversational recommender
 \end{IEEEkeywords}

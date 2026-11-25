@@ -1,0 +1,37 @@
+% ==========================================
+% Evaluation metrics (included by sections/04_experiments.tex)
+% Targets are design goals from the proposal, not results.
+% ==========================================
+\begin{table}[t]
+    \centering
+    \caption{Evaluation Metrics and Targets}
+    \label{tab:metrics}
+    \footnotesize
+    \setlength{\tabcolsep}{3pt}
+    \begin{tabular}{@{}p{1.75cm}p{4.65cm}p{1.45cm}@{}}
+        \toprule
+        Metric & Definition & Target \\
+        \midrule
+        CVR & recommendations violating a clinical rule / all recommendations
+            & 0\% (with or without LLM) \\
+        AVR & recommendations containing a declared allergen / all
+            & 0\% \\
+        Grounding rate & numbers in the reply that match the database, measured
+            for raw Gemini output and for the final reply & 100\% (final) \\
+        Intent accuracy & correct intent and context (place, time, activity,
+            allergen) on the labeled dialogue set & $\ge 90$\% \\
+        Calorie MAE & $\frac{1}{N}\sum |\text{kcal} - B_t|$ over recommendations
+            & $\le 180$\,kcal \\
+        Latency & offline engine per request; end-to-end with Gemini (P50/P95)
+            & $\le 50$\,ms; P95 $\le 5$\,s \\
+        Fallback rate & replies falling back to the template (timeout, error,
+            mismatch) & reported \\
+        Position consistency & top-3 overlap over five shuffled orders of the
+            same candidates & reported \\
+        Convergence & interactions until top-1 matches a changed preference
+            & $\le 5$ \\
+        User study & adoption rate, SUS, perceived clarity (5-point Likert)
+            & SUS $\ge 68$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}

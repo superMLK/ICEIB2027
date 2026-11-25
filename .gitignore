@@ -22,3 +22,6 @@
 *.pptx
 *.docx
 myRef/
+
+# Claude Code 本機設定
+.claude/

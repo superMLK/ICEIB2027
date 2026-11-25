@@ -1,19 +1,62 @@
 % ==========================================
-% II. Related Work (~0.75 page)
-% Logic: Existing methods -> Comparison -> Limitations
-% Key question: What has been done? What is missing?
+% II. Related Work (A2Z: M-O)
+% M methods (old to new) -> N new trend -> O organize limitations (table)
+% Half AI technology (A, B), half domain knowledge (C, D).
 % ==========================================
 \section{Related Work}
 \label{sec:related_work}
 
-\subsection{Category A of Existing Methods}
-Summarize representative studies in this category. For example, random
-forests~\cite{breiman2001rf} are widely used for classifying sensor data.
+\subsection{LLM Agents and LLM-Based Ranking}
+ReAct interleaves reasoning with tool calls~\cite{yao2023react}, and
+retrieval-augmented generation grounds outputs in retrieved
+documents~\cite{lewis2020rag}; both let an LLM answer from data rather than
+from memory. Gemini~2.5 Flash adds a controllable thinking
+budget~\cite{gemini2025report}, and the Gemini API can return output that
+follows a JSON schema, which makes LLM results machine-verifiable
+\cite{google2026structured}. LLMs are also zero-shot rankers for
+recommendation, but their rankings depend on the order of candidates in the
+prompt and favor popular items~\cite{hou2024llmrank}.
 
-\subsection{Category B of Existing Methods}
-Summarize another line of work. Many studies implement their models with
-open-source toolkits such as scikit-learn~\cite{pedregosa2011sklearn}.
+\subsection{Health-Aware Food Recommendation}
+MOPI-HFRS balances preference, health, and nutritional diversity through graph
+learning and Pareto optimization, and explains results with an
+LLM~\cite{zhang2025mopihfrs}. MORL-A2C adds an actor-critic reranker that raises
+the health score H-Score@20 from 46.05\% to 69.57\% while Recall@20 drops from
+25.64\% to 23.61\%~\cite{vasantlal2026morla2c}: when health is a reward term,
+it is traded against accuracy. KERL grounds an LLM in a food knowledge graph to
+satisfy dietary constraints~\cite{mohbat2025kerl}, and personal causal graphs
+help an LLM lower post-meal glucose in counterfactual
+evaluation~\cite{yang2025causalgraph}. These systems target recipes and offline
+evaluation rather than purchasable meals.
 
-\subsection{Summary and Limitations}
-Compare the above approaches and point out the limitations that motivate
-this work. Conclude with how the proposed scheme differs from them.
+\subsection{LLM Nutrition Estimation}
+NutriBench evaluates 12 LLMs on 11{,}857 meal descriptions and finds estimates
+close to those of dietitians~\cite{dhaliwal2025nutribench}. From images alone,
+however, calorie errors reach about 51\% MAPE and fall to about 29\% only with
+ingredient weights~\cite{bhatambarekar2025multimodal}. For eight Taiwanese
+convenience-store meal boxes, five chatbots underestimated sodium, with a
+coefficient of variation of 20--70\% across repeated
+queries~\cite{hsuan2025mealbox}, and no renal diet produced by three LLMs fully
+met the guidelines~\cite{aydincil2026renal}.
+
+\subsection{Clinical Guidelines and Wearable Data}
+The 2025 AHA/ACC guideline recommends less than 2{,}300\,mg of sodium per day,
+ideally 1{,}500\,mg, with the DASH diet as first-line
+therapy~\cite{jones2025hypertension}; ADA 2026 places medical nutrition therapy
+at the core of diabetes care~\cite{ada2026standards}; the 2020 ACR guideline
+conditionally recommends limiting purines~\cite{fitzgerald2020gout}; and KDIGO
+2024 recommends less than 2\,g of sodium per day for CKD~\cite{kdigo2024ckd}.
+On the device side, wrist-worn trackers estimate energy expenditure with errors
+above 30\%~\cite{germini2022wearable,shcherbina2017wrist}, and the Google Fit
+APIs are being retired in 2026 in favor of Health
+Connect~\cite{android2025fitmigration}. Contextual bandits are a common tool
+for just-in-time mobile health~\cite{lei2017actorcritic,svihrova2025bandits};
+in a randomized trial with 13{,}463 participants, PEARL added 296 daily steps
+over the control group in the first month~\cite{lee2025pearl}, and guarded offline RL keeps treatment
+policies within clinically safe regions~\cite{yan2025ogsrl}.
+
+Table~\ref{tab:related} summarizes the gap: no existing approach lets rules
+own safety and numbers while an LLM owns language, combines live wearable
+activity with walkable, purchasable meals, and stays safe when the LLM fails.
+
+\input{tables/related}

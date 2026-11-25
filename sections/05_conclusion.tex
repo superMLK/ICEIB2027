@@ -1,12 +1,26 @@
 % ==========================================
-% V. Conclusion (~0.3 page; references take the rest of ~0.6 page)
-% Logic: Findings -> Implications -> Limitations -> Future work
-% Key question: What has been learned? What remains unresolved?
+% V. Conclusion (A2Z: W-Z)
+% W what was proposed -> X where it excels -> Y yields -> Z zen / future work
 % ==========================================
 \section{Conclusion}
 \label{sec:conclusion}
 
-\textbf{[Findings]} Summarize what was proposed and the main results.
-\textbf{[Implications]} State what the results mean for research or practice.
-\textbf{[Limitations]} Acknowledge the limitations of this study.
-\textbf{[Future work]} Describe the directions for future research.
+% W: What proposed
+This paper presented NutriAgent, a grounded conversational agent for eating-out
+decisions that addresses the unreliable numbers of LLM-based dietary advice.
+% X: eXcel
+Its key idea is to let deterministic clinical and allergen rules filter the
+candidates before any LLM call, so that the LLM only ranks and explains a safe
+pool and every number in a reply is checked against the database. The design
+also damps unreliable wearable energy data and keeps working offline.
+% Y: Yields
+An offline functional check of the prototype on 5 profiles and 45 evaluations
+confirmed that the gate and ranking behave as designed, with a calorie MAE of
+114.48\,kcal and sub-millisecond latency; these figures verify the
+implementation rather than the approach.
+% Z: Zen
+Future work will implement the numeric check of Gemini replies, Gemini-based
+intent parsing, and shuffled schema-constrained scoring; build the full
+datasets; run the baseline comparison and the user study; and replace the
+conservative CKD rule with graded rules once serum potassium data are
+available.

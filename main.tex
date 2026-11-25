@@ -1,7 +1,8 @@
 % ==========================================
-% ICEIB 2027 — IEEE Conference Paper Template
+% NutriAgent — IEEE Conference Paper (ICEIB 2027 template)
 % Compiler: pdfLaTeX   |   Main document: main.tex
-% Edit the files in sections/ ; this file only assembles them.
+% Edit the files in sections/, figures/ and tables/;
+% this file only holds the preamble, title and authors.
 % ==========================================
 \documentclass[conference]{IEEEtran}
 
@@ -12,32 +13,71 @@
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{graphicx}
 \usepackage{booktabs}
+\usepackage{multirow}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{xcolor}
 \usepackage{url}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,shapes.geometric,fit,calc,backgrounds}
 
 \graphicspath{{figures/}}
+
+% ==========================================
+% Shared TikZ styles (used by figures/architecture.tex
+% and figures/flowchart.tex)
+% Colour semantics: blue = input/output, violet = planner,
+% green = data/analytics, red = safety gate, orange = LLM,
+% gray = external source.
+% ==========================================
+\definecolor{naBlue}{HTML}{2B5797}
+\definecolor{naViolet}{HTML}{5B3FA0}
+\definecolor{naGreen}{HTML}{2E7D4F}
+\definecolor{naRed}{HTML}{B03A3A}
+\definecolor{naOrange}{HTML}{B8730A}
+\definecolor{naGray}{HTML}{5F6670}
+
+\tikzset{
+  na/box/.style={draw=#1, fill=#1!8, rounded corners=2pt, thick,
+                 align=center, inner sep=2.5pt, font=\scriptsize},
+  na/ext/.style={na/box=naGray, dashed},
+  na/flow/.style={-{Stealth[length=4pt]}, semithick, black!80},
+  na/ctrl/.style={-{Stealth[length=4pt]}, semithick, naViolet, densely dashed},
+  na/llm/.style={-{Stealth[length=4pt]}, semithick, naOrange, dashed},
+  na/decision/.style={draw=naOrange, fill=naOrange!8, diamond, aspect=2.4,
+                      thick, align=center, inner sep=0.5pt, font=\scriptsize},
+  na/io/.style={draw=naViolet, fill=naViolet!8, trapezium,
+                trapezium left angle=72, trapezium right angle=108,
+                thick, align=center, inner sep=2pt, font=\scriptsize},
+  na/label/.style={font=\tiny, inner sep=1pt},
+}
 
 \begin{document}
 
 % ==========================================
 % Title
 % ==========================================
-\title{Your Research Paper Title}
+\title{NutriAgent: A Grounded Conversational LLM Agent for Real-Time Dietary
+Decisions Integrating Wearable IoT and Clinical Nutrition Rules}
 
 % ==========================================
 % Authors
 % ==========================================
 \author{
-    \IEEEauthorblockN{
-        First Author and Second Author
-    }
+    \IEEEauthorblockN{Wei-Sheng Li}
     \IEEEauthorblockA{
-        Department of Computer Science and Engineering\\
-        National Chung Hsing University\\
+        \textit{Department of Computer Science and Engineering}\\
+        \textit{National Chung Hsing University}\\
         Taichung, Taiwan\\
-        Email: author@example.com
+        first.author@example.com
+    }
+    \and
+    \IEEEauthorblockN{Huan Chen}
+    \IEEEauthorblockA{
+        \textit{Department of Computer Science and Engineering}\\
+        \textit{National Chung Hsing University}\\
+        Taichung, Taiwan\\
+        second.author@example.com
     }
 }
 
@@ -72,12 +112,6 @@
 % V. Conclusion
 % ==========================================
 \input{sections/05_conclusion}
-
-% ==========================================
-% Acknowledgment (Optional)
-% ==========================================
-% \section*{Acknowledgment}
-% The authors would like to thank ...
 
 % ==========================================
 % References

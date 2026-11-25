@@ -1,0 +1,97 @@
+% ==========================================
+% Fig. 1 — NutriAgent system architecture (TikZ)
+% Included by sections/03_proposed_scheme.tex inside a figure* environment.
+% Styles (na/...) and colours (na...) are defined in main.tex.
+% Layout: modules (1)-(4) on the top row (left to right), (5)-(8) on the
+% bottom row (right to left); external sources above, knowledge stores
+% K1-K4 on the right and below, Gemini API on the left.
+% ==========================================
+\begin{tikzpicture}[
+    mod/.style={text width=2.55cm, minimum height=0.95cm},
+    ext/.style={text width=2.1cm, minimum height=0.7cm},
+  ]
+
+  % ---------- Core modules: top row ----------
+  \node[na/box=naBlue, mod] (m1) at (0,0)
+    {\textbf{(1) User Scenario}\\ diner asks in chat:\\ ``lunch near Gongguan, light''};
+  \node[na/box=naBlue, mod] (m2) at (3.1,0)
+    {\textbf{(2) Query / Input}\\ message + profile, allergens,\\ location, activity};
+  \node[na/box=naViolet, mod] (m3) at (6.2,0)
+    {\textbf{(3) Planner \& Reasoning}\\ intent, context override,\\ tool calls, exceptions};
+  \node[na/box=naGreen, mod] (m4) at (9.3,0)
+    {\textbf{(4) Data Acquisition}\\ IoT adapter + plausibility;\\ Haversine 1.2$\rightarrow$2.5\,km};
+
+  % ---------- Core modules: bottom row ----------
+  \node[na/box=naGreen, mod] (m5) at (9.3,-1.9)
+    {\textbf{(5) Analytics Engine}\\ dynamic TDEE, meal budget\\ $\le$ 900\,kcal, state $s_t$};
+  \node[na/box=naRed, mod] (m6) at (6.2,-1.9)
+    {\textbf{(6) Domain Knowledge}\\ clinical hard gate +\\ TFDA-11 allergens};
+  \node[na/box=naOrange, mod] (m7) at (3.1,-1.9)
+    {\textbf{(7) Decision / Ranking}\\ local preference + Gemini\\ scores (safe pool only)};
+  \node[na/box=naBlue, mod] (m8) at (0,-1.9)
+    {\textbf{(8) Output \& Interaction}\\ grounded reply, numeric\\ check, cards, feedback};
+
+  % ---------- External sources (top strip) ----------
+  \node[na/ext, ext] (wear) at (2.0,1.45)
+    {\textbf{Wearable}\\ Health Connect / HealthKit};
+  \node[na/ext, ext] (report) at (4.4,1.45)
+    {\textbf{Health report}\\ BP, glucose, UA, LDL, eGFR};
+  \node[na/ext, ext] (gps) at (9.3,1.45)
+    {\textbf{GPS / location}\\ latitude, longitude};
+
+  % ---------- Gemini API (left) ----------
+  \node[na/box=naOrange, dashed, ext] (llm) at (-2.9,-1.9)
+    {\textbf{Gemini API}\\ gemini-2.5-flash\\ (offline fallback)};
+
+  % ---------- Knowledge stores ----------
+  \node[na/box=naGreen, ext] (k1) at (12.2,0)
+    {\textbf{K1} Meal nutrition DB\\ labels, price, location};
+  \node[na/box=naRed, ext] (k2) at (5.1,-3.45)
+    {\textbf{K2} Clinical rules\\ Na, GI, purine, sat.\ fat, K/P};
+  \node[na/box=naRed, ext] (k3) at (7.3,-3.45)
+    {\textbf{K3} Allergen aliases\\ TFDA-11 + seafood};
+  \node[na/box=naOrange, ext] (k4) at (2.2,-3.45)
+    {\textbf{K4} Interaction memory\\ $(s,a,r,s',f)$, weights $w$};
+
+  % ---------- Main data flow (solid) ----------
+  \draw[na/flow] (m1) -- (m2);
+  \draw[na/flow] (m2) -- (m3);
+  \draw[na/flow] (m3) -- (m4);
+  \draw[na/flow] (m4) -- (m5);
+  \draw[na/flow] (m5) -- (m6);
+  \draw[na/flow] (m6) -- (m7);
+  \draw[na/flow] (m7) -- (m8);
+
+  % external inputs
+  \draw[na/flow] (wear.south) -- (m2.north -| wear.south);
+  \draw[na/flow] (report.south) -- (m2.north -| report.south);
+  \draw[na/flow] (gps) -- (m4);
+
+  % knowledge stores
+  \draw[na/flow] (k1) -- (m4);
+  \draw[na/flow] (k2.north) -- (m6.south -| k2.north);
+  \draw[na/flow] (k3.north) -- (m6.south -| k3.north);
+  \draw[na/flow] (k4.north) -- (m7.south -| k4.north);
+
+  % ---------- Planner orchestration (violet dashed) ----------
+  \draw[na/ctrl] (m3.south) -- (m6.north);
+  \draw[na/ctrl] (m3.south east) -- (m5.north west);
+
+  % ---------- LLM calls and feedback loop (orange dashed) ----------
+  \draw[na/llm] (llm.north) |- (-1.45,-0.95) -| (m7.north west)
+    node[na/label, pos=0.25, above, text=naOrange] {JSON scores};
+  \draw[na/llm] (llm) -- (m8)
+    node[na/label, midway, below, text=naOrange] {reply};
+  \draw[na/llm] (m8.south) |- (k4.west)
+    node[na/label, pos=0.75, below, text=naOrange] {feedback $r$};
+
+  % ---------- Legend ----------
+  \begin{scope}[shift={(3.0,-4.55)}]
+    \draw[na/flow] (0,0) -- (0.7,0);
+    \node[na/label, anchor=west, font=\scriptsize] at (0.75,0) {data flow};
+    \draw[na/ctrl] (2.9,0) -- (3.6,0);
+    \node[na/label, anchor=west, font=\scriptsize] at (3.65,0) {Planner orchestration};
+    \draw[na/llm] (7.0,0) -- (7.7,0);
+    \node[na/label, anchor=west, font=\scriptsize] at (7.75,0) {LLM call / feedback loop};
+  \end{scope}
+\end{tikzpicture}

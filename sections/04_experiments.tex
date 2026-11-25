@@ -1,43 +1,95 @@
 % ==========================================
-% IV. Experiments and Discussion (~1.65 pages)
-% Logic: Datasets -> Baselines -> Metrics -> Results -> Discussion
-% Key question: How do you demonstrate its effectiveness?
+% IV. Experiments and Discussion (A2Z: Q-V)
+% Q metrics -> R baselines -> S setup -> T parameters ->
+% U preliminary results -> V verification plan; then Discussion.
+% All results are either the offline prototype check or stated as
+% expected outcomes. No experimental numbers are invented.
 % ==========================================
 \section{Experiments and Discussion}
 \label{sec:experiments}
 
-\subsection{Datasets}
-Describe the data source, collection period, number of samples, features,
-and train/test split.
+\subsection{Experimental Setup}
+The evaluation is designed around three datasets. First, 50 synthetic clinical
+profiles, ten each for hypertension, prediabetes, gout, high activity, and
+healthy controls, include eGFR so that the CKD rule is exercised. Second, a
+Taiwanese eating-out database of at least 200 meals is compiled from the public
+nutrition labels of convenience stores and bento chains and extended with
+coordinates, glycemic index, purine, potassium and phosphorus levels, and
+allergens. Third, a Chinese dialogue set of at least 200 utterances is labeled
+with intents and contexts, including recommendations, feedback, questions about
+rejected meals, and colloquial allergen declarations. Five case studies cover
+the lunch scenario of Section~\ref{sec:proposed_scheme}, a post-exercise
+dinner, an area with no compliant meal, multiple allergies, and a Gemini outage.
 
 \subsection{Baselines}
-List the methods compared against the proposed scheme, e.g., linear
-regression and random forest~\cite{breiman2001rf}.
+Five baselines isolate the contribution of each component:
+B1, nearest or most popular meal, mimicking map and delivery apps;
+B2, a static calorie rule without dynamic TDEE or the gate;
+B3, Gemini zero-shot, which receives the user context and the full nearby menu
+and picks the top-3 without the gate;
+B4, an ablation of NutriAgent without the gate; and
+B5, NutriAgent offline, without any LLM, which measures what Gemini adds.
 
 \subsection{Evaluation Metrics}
-The prediction performance is measured by the root mean square error (RMSE):
-\begin{equation}
-    \mathrm{RMSE} = \sqrt{\frac{1}{N} \sum_{i=1}^{N} \left( y_i - \hat{y}_i \right)^{2}},
-    \label{eq:rmse}
-\end{equation}
-where $y_i$ and $\hat{y}_i$ are the actual and predicted values, respectively.
+Table~\ref{tab:metrics} lists the ten metrics. The clinical violation rate (CVR)
+and the allergen violation rate (AVR) measure safety; the grounding rate is
+measured separately for the raw Gemini output and for the final reply;
+position consistency tests the shuffling strategy against
+position bias~\cite{hou2024llmrank}. A user study with 10--15 students and
+office workers will use the system for the lunches of five working days,
+randomly assigned to a Gemini group or an offline group, followed by the System
+Usability Scale (SUS). The study evaluates usability only and involves no
+medical intervention.
 
-\subsection{Results}
-Table~\ref{tab:comparison} compares the proposed scheme with the baselines.
-Fig.~\ref{fig:results} visualizes the prediction results.
+\input{tables/metrics}
 
-\input{tables/comparison}
+\subsection{Preliminary Results and Implementation Status}
+The prototype runs as a chat web interface (Python, Flask, and the Gemini REST
+API). Table~\ref{tab:prototype}(a) reports a functional check of the offline
+engine on 5 synthetic profiles with 45 evaluations, without a Gemini API key.
+These numbers verify that the implementation is correct; they are \emph{not}
+experimental conclusions. In particular, CVR and AVR of 0\% follow from the
+design, because the gate runs before ranking, and the data set is small.
+Table~\ref{tab:prototype}(b) lists what is implemented: the check did not
+exercise the LLM path, and the numeric verification of the Gemini reply in
+Algorithm~\ref{alg:rank} is not yet implemented.
 
-\begin{figure*}[htbp]
-    \centering
-    \includegraphics[width=0.48\textwidth]{example-image-b}
-    \hfill
-    \includegraphics[width=0.48\textwidth]{example-image-c}
-    \caption{Experimental results: (left) actual versus predicted values;
-    (right) distribution of prediction errors.}
-    \label{fig:results}
-\end{figure*}
+\input{tables/prototype}
+
+With the full datasets, we expect CVR and AVR to remain 0\% with or without
+Gemini, provided that the nutrition labels are correct, because the LLM only
+sees the safe pool. We expect the final grounding rate to reach 100\% through
+the numeric check and the template fallback, and we will report the raw
+inconsistency rate of Gemini separately. We hypothesize that the zero-shot
+baseline B3 will show non-zero violations, and we target a calorie MAE of at
+most 180\,kcal. These are hypotheses to be tested, not observed results.
 
 \subsection{Discussion}
-Explain why the proposed scheme performs better (or worse) in certain cases,
-analyze the limitations, and discuss practical implications.
+\emph{Can an LLM give dietary advice and numbers directly?} Optimistic evidence
+shows LLM estimates close to those of dietitians~\cite{dhaliwal2025nutribench}
+and gains from knowledge grounding~\cite{mohbat2025kerl}, whereas cautious
+evidence shows systematic sodium underestimation~\cite{hsuan2025mealbox},
+renal diets with excess potassium~\cite{aydincil2026renal}, and position
+bias~\cite{hou2024llmrank}. The consensus is to use the LLM as an interface
+with grounded numbers; NutriAgent therefore keeps every safety decision outside
+the LLM.
+
+\emph{Can consumer wearable energy data drive dietary decisions?} Heart rate is
+fairly accurate~\cite{shcherbina2017wrist} and wearable feedback can change
+behavior~\cite{lee2025pearl}, but energy expenditure errors exceed
+30\%~\cite{germini2022wearable}. Wearables suit activity levels and trends
+rather than one-to-one compensation, which motivates the damping and the cap in
+\eqref{eq:tdee} and \eqref{eq:budget}.
+
+\emph{Should potassium and phosphorus be restricted for all CKD patients?}
+KDIGO 2024 recommends individualizing potassium by kidney function and serum
+potassium~\cite{kdigo2024ckd}, yet LLM-generated renal diets already exceed safe
+limits~\cite{aydincil2026renal}. Without serum potassium data, NutriAgent adopts
+the conservative rule, at the cost of excluding some beneficial vegetables, and
+advises users to confirm their targets with a dietitian.
+
+The system is not a medical device, and its safety guarantee holds only if the
+label data are correct. When Gemini is enabled, health data are sent to an
+external API, so a production version should send only derived flags (e.g.,
+``sodium restricted'') with explicit consent, while the offline mode keeps all
+data on the device.

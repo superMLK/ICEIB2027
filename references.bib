@@ -1,55 +1,287 @@
 % =====================================================================
-%  References (BibTeX)
-%  Cite with \cite{key} in sections/*.tex. Uncited entries are not listed.
-%  Tip: Google Scholar -> "Cite" -> "BibTeX" gives a ready-to-paste entry.
-%
-%  Note: BibTeX ignores "%" comments, so never write an "at" sign before
-%  an entry type inside a comment, or BibTeX will try to parse it.
-%  Example for a website / dataset (copy, then add the "at" sign):
-%    misc{dataset2027,
-%      author       = {{Data Provider}},
-%      title        = {Dataset Name},
-%      howpublished = {\url{https://example.com}},
-%      note         = {Accessed: Mar. 1, 2027},
-%      year         = {2027}
-%    }
+%  References for the NutriAgent paper (32 entries, [1]-[32] of the
+%  proposal). Cite with \cite{key}; uncited entries are not listed.
+%  Entries [2][9][13][16][17][18][19][30][32] were checked online on
+%  2026-11-25 (arXiv / DOI / official URL).
+%  Note: BibTeX ignores "%" comments, so never put an "at" sign before
+%  an entry type inside a comment.
 % =====================================================================
 
-@article{atzori2010iot,
-  author  = {Atzori, Luigi and Iera, Antonio and Morabito, Giacomo},
-  title   = {The {Internet of Things}: A survey},
-  journal = {Computer Networks},
-  volume  = {54},
-  number  = {15},
-  pages   = {2787--2805},
-  year    = {2010}
+% ---------- [1]-[9], [27]: AI technology ----------
+
+@inproceedings{zhang2025mopihfrs,
+  author    = {Zhang, Z. and Wang, Z. and Ma, T. and Taneja, V. S. and Nelson, S. and Le, N. H. L. and Murugesan, K. and Ju, M. and Chawla, N. V. and Zhang, C. and Ye, Y.},
+  title     = {{MOPI-HFRS}: A Multi-objective Personalized Health-aware Food Recommendation System with {LLM}-enhanced Interpretation},
+  booktitle = {Proc. 31st ACM SIGKDD Conf. Knowledge Discovery and Data Mining (KDD)},
+  pages     = {2860--2871},
+  year      = {2025},
+  note      = {arXiv:2412.08847}
 }
 
-@article{gubbi2013iot,
-  author  = {Gubbi, Jayavardhana and Buyya, Rajkumar and Marusic, Slaven and Palaniswami, Marimuthu},
-  title   = {{Internet of Things (IoT)}: A vision, architectural elements, and future directions},
-  journal = {Future Generation Computer Systems},
-  volume  = {29},
-  number  = {7},
-  pages   = {1645--1660},
-  year    = {2013}
+@misc{vasantlal2026morla2c,
+  author       = {Vasantlal, Aarya and Zolla, Joshua and Zhang, Chuxu},
+  title        = {{MORL-A2C}: Multi-Objective Reinforcement Learning Reranker for Optimizing Healthiness in {MOPI-HFRS}},
+  howpublished = {arXiv:2606.23603},
+  year         = {2026}
 }
 
-@article{breiman2001rf,
-  author  = {Breiman, Leo},
-  title   = {Random forests},
-  journal = {Machine Learning},
-  volume  = {45},
+@inproceedings{mohbat2025kerl,
+  author    = {Mohbat, F. and Zaki, M. J.},
+  title     = {{KERL}: Knowledge-Enhanced Personalized Recipe Recommendation using Large Language Models},
+  booktitle = {Proc. 63rd Annu. Meeting Assoc. Comput. Linguistics (ACL)},
+  year      = {2025},
+  note      = {arXiv:2505.14629}
+}
+
+@inproceedings{dhaliwal2025nutribench,
+  author    = {Dhaliwal, M. P. and others},
+  title     = {{NutriBench}: A Dataset for Evaluating Large Language Models on Nutrition Estimation from Meal Descriptions},
+  booktitle = {Proc. Int. Conf. Learning Representations (ICLR)},
+  year      = {2025},
+  note      = {arXiv:2407.12843}
+}
+
+@article{hsuan2025mealbox,
+  author  = {Hsuan, C.-F. and Lee, Y.-J. and Hsu, H.-C. and Ouyang, C.-M. and Yeh, W.-C. and Tang, W.-H.},
+  title   = {Comparison of Accuracy in the Evaluation of Nutritional Labels on Commercial Ready-to-Eat Meal Boxes Between Professional Nutritionists and Chatbots},
+  journal = {Nutrients},
+  volume  = {17},
+  number  = {19},
+  pages   = {3044},
+  year    = {2025}
+}
+
+@misc{lee2025pearl,
+  author       = {Lee, A. A. and Hegde, N. and Deliu, N. and Rosenzweig, E. and Suggala, A. and others},
+  title        = {A Personalized Exercise Assistant using Reinforcement Learning ({PEARL}): Results from a Four-arm Randomized-controlled Trial},
+  howpublished = {arXiv:2508.10060},
+  year         = {2025}
+}
+
+@misc{yang2025causalgraph,
+  author       = {Yang, Z. and Rahmani, A.},
+  title        = {Personalized Causal Graph Reasoning for {LLMs}: An Implementation for Dietary Recommendations},
+  howpublished = {arXiv:2503.00134},
+  year         = {2025}
+}
+
+@inproceedings{yan2025ogsrl,
+  author    = {Yan, R. and Shen, X. and Wachi, A. and Gros, S. and Zhao, A. and Hu, X.},
+  title     = {Offline Guarded Safe Reinforcement Learning for Medical Treatment Optimization Strategies},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2025},
+  note      = {arXiv:2505.16242}
+}
+
+@mastersthesis{bhatambarekar2025multimodal,
+  author = {Bhatambarekar, Gayatri Milind},
+  title  = {Conversational Multimodal {LLMs} for Food Nutritional Information Retrieval: A Systematic Evaluation},
+  school = {Virginia Tech},
+  address = {Blacksburg, VA, USA},
+  year   = {2025},
+  note   = {[Online]. Available: \url{https://hdl.handle.net/10919/137644}}
+}
+
+% ---------- [10]-[23]: Domain knowledge ----------
+
+@article{germini2022wearable,
+  author  = {Germini, F. and Noronha, N. and Borg Debono, V. and others},
+  title   = {Accuracy and Acceptability of Wrist-Wearable Activity-Tracking Devices: Systematic Review of the Literature},
+  journal = {Journal of Medical Internet Research},
+  volume  = {24},
   number  = {1},
-  pages   = {5--32},
-  year    = {2001}
+  pages   = {e30791},
+  year    = {2022}
 }
 
-@article{pedregosa2011sklearn,
-  author  = {Pedregosa, Fabian and Varoquaux, Ga{\"e}l and Gramfort, Alexandre and Michel, Vincent and Thirion, Bertrand and others},
-  title   = {Scikit-learn: Machine learning in {Python}},
-  journal = {Journal of Machine Learning Research},
-  volume  = {12},
-  pages   = {2825--2830},
+@article{shcherbina2017wrist,
+  author  = {Shcherbina, A. and Mattsson, C. M. and Waggott, D. and others},
+  title   = {Accuracy in Wrist-Worn, Sensor-Based Measurements of Heart Rate and Energy Expenditure in a Diverse Cohort},
+  journal = {Journal of Personalized Medicine},
+  volume  = {7},
+  number  = {2},
+  pages   = {3},
+  year    = {2017}
+}
+
+@article{jones2025hypertension,
+  author  = {Jones, D. W. and Ferdinand, K. C. and Taler, S. J. and others},
+  title   = {2025 {AHA/ACC/AANP/AAPA/ABC/ACCP/ACPM/AGS/AMA/ASPC/NMA/PCNA/SGIM} Guideline for the Prevention, Detection, Evaluation and Management of High Blood Pressure in Adults},
+  journal = {Hypertension},
+  month   = aug,
+  year    = {2025}
+}
+
+@article{ada2026standards,
+  author  = {{American Diabetes Association Professional Practice Committee}},
+  title   = {5. Facilitating Positive Health Behaviors and Well-being to Improve Health Outcomes: Standards of Care in Diabetes---2026},
+  journal = {Diabetes Care},
+  volume  = {49},
+  number  = {Suppl. 1},
+  pages   = {S89--S131},
+  year    = {2026},
+  doi     = {10.2337/dc26-S005}
+}
+
+@article{fitzgerald2020gout,
+  author  = {FitzGerald, J. D. and Dalbeth, N. and Mikuls, T. and others},
+  title   = {2020 {American College of Rheumatology} Guideline for the Management of Gout},
+  journal = {Arthritis \& Rheumatology},
+  volume  = {72},
+  number  = {6},
+  pages   = {879--895},
+  year    = {2020}
+}
+
+@book{who2025hypertension,
+  author    = {{World Health Organization}},
+  title     = {Global Report on Hypertension 2025: High Stakes---Turning Evidence into Action},
+  publisher = {World Health Organization},
+  address   = {Geneva, Switzerland},
+  year      = {2025},
+  note      = {ISBN 9789240115569}
+}
+
+@misc{mohw2018allergen,
+  author       = {{Ministry of Health and Welfare, Taiwan}},
+  title        = {Announcement of Food Allergen Labeling Regulations: Mandatory Allergen Categories Expanded to 11, Effective July 1, 2020},
+  howpublished = {\url{https://www.mohw.gov.tw/cp-16-43376-1.html}},
+  month        = aug,
+  year         = {2018},
+  note         = {(in Chinese)}
+}
+
+@misc{hpa2026metabolic,
+  author       = {{Health Promotion Administration, Ministry of Health and Welfare, Taiwan}},
+  title        = {Press Releases on the Prevalence of Metabolic Syndrome and Abdominal Obesity among Adults Aged 20 and Over (Nutrition and Health Survey in Taiwan)},
+  howpublished = {\url{https://www.mohw.gov.tw/cp-16-87061-1.html} and \url{https://www.mohw.gov.tw/cp-16-79537-1.html}},
+  year         = {2024--2026},
+  note         = {(in Chinese)}
+}
+
+@misc{tnf2025survey,
+  author       = {{Taiwan Nutrition Foundation and Department of Nutrition and Health Sciences, Chang Gung University of Science and Technology and Standard Foods}},
+  title        = {Survey on Metabolic Awareness and Eating Behavior among Office Workers Aged 22--65 ({N} = 1,000)},
+  howpublished = {United Daily News Health, \url{https://health.udn.com/health/story/5999/9122472}},
+  month        = nov,
+  year         = {2025},
+  note         = {(in Chinese)}
+}
+
+@misc{android2025fitmigration,
+  author       = {{Android Developers}},
+  title        = {Google Fit Migration {FAQ}},
+  howpublished = {\url{https://developer.android.com/health-and-fitness/guides/health-connect/migrate/migration-faq}},
+  year         = {2025}
+}
+
+@article{gardner2018dietfits,
+  author  = {Gardner, C. D. and Trepanowski, J. F. and Del Gobbo, L. C. and others},
+  title   = {Effect of Low-Fat vs Low-Carbohydrate Diet on 12-Month Weight Loss in Overweight Adults: The {DIETFITS} Randomized Clinical Trial},
+  journal = {JAMA},
+  volume  = {319},
+  number  = {7},
+  pages   = {667--679},
+  year    = {2018}
+}
+
+@article{hall2011energy,
+  author  = {Hall, K. D. and Sacks, G. and Chandramohan, D. and others},
+  title   = {Quantification of the Effect of Energy Imbalance on Bodyweight},
+  journal = {The Lancet},
+  volume  = {378},
+  number  = {9793},
+  pages   = {826--837},
   year    = {2011}
+}
+
+@article{mifflin1990bmr,
+  author  = {Mifflin, M. D. and St Jeor, S. T. and Hill, L. A. and Scott, B. J. and Daugherty, S. A. and Koh, Y. O.},
+  title   = {A New Predictive Equation for Resting Energy Expenditure in Healthy Individuals},
+  journal = {The American Journal of Clinical Nutrition},
+  volume  = {51},
+  number  = {2},
+  pages   = {241--247},
+  year    = {1990}
+}
+
+@book{thaler2008nudge,
+  author    = {Thaler, R. H. and Sunstein, C. R.},
+  title     = {Nudge: Improving Decisions about Health, Wealth, and Happiness},
+  publisher = {Yale University Press},
+  address   = {New Haven, CT, USA},
+  year      = {2008}
+}
+
+% ---------- [24]-[32]: Bandits, LLMs and APIs ----------
+
+@misc{lei2017actorcritic,
+  author       = {Lei, H. and Tewari, A. and Murphy, S. A.},
+  title        = {An Actor-Critic Contextual Bandit Algorithm for Personalized Mobile Health Interventions},
+  howpublished = {arXiv:1706.09090},
+  year         = {2017}
+}
+
+@article{svihrova2025bandits,
+  author  = {{\v{S}}vihrov{\'a}, R. and others},
+  title   = {Designing Digital Health Interventions with Causal Inference and Multi-Armed Bandits: A Review},
+  journal = {Frontiers in Digital Health},
+  year    = {2025},
+  doi     = {10.3389/fdgth.2025.1435917}
+}
+
+@misc{gemini2025report,
+  author       = {{Gemini Team, Google}},
+  title        = {Gemini 2.5: Pushing the Frontier with Advanced Reasoning, Multimodality, Long Context, and Next Generation Agentic Capabilities},
+  howpublished = {arXiv:2507.06261},
+  year         = {2025}
+}
+
+@inproceedings{hou2024llmrank,
+  author    = {Hou, Y. and Zhang, J. and Lin, Z. and Lu, H. and Xie, R. and McAuley, J. and Zhao, W. X.},
+  title     = {Large Language Models are Zero-Shot Rankers for Recommender Systems},
+  booktitle = {Proc. European Conf. Information Retrieval (ECIR)},
+  year      = {2024},
+  note      = {arXiv:2305.08845}
+}
+
+@inproceedings{yao2023react,
+  author    = {Yao, S. and Zhao, J. and Yu, D. and Du, N. and Shafran, I. and Narasimhan, K. and Cao, Y.},
+  title     = {{ReAct}: Synergizing Reasoning and Acting in Language Models},
+  booktitle = {Proc. Int. Conf. Learning Representations (ICLR)},
+  year      = {2023}
+}
+
+@inproceedings{lewis2020rag,
+  author    = {Lewis, P. and Perez, E. and Piktus, A. and others},
+  title     = {Retrieval-Augmented Generation for Knowledge-Intensive {NLP} Tasks},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2020}
+}
+
+@article{aydincil2026renal,
+  author  = {Ayd{\i}n {\c{C}}il, M. and Karata{\c{s}}, N. and Mustafao{\u{g}}lu, O. and Sevin{\c{c}}, C.},
+  title   = {Comparison of {AI}-Generated Renal Diets by Different Large Language Models: A Guideline-Based Evaluation with Expert Input},
+  journal = {BMC Nephrology},
+  volume  = {27},
+  number  = {1},
+  year    = {2026},
+  doi     = {10.1186/s12882-026-04764-w}
+}
+
+@article{kdigo2024ckd,
+  author  = {{Kidney Disease: Improving Global Outcomes (KDIGO) CKD Work Group}},
+  title   = {{KDIGO} 2024 Clinical Practice Guideline for the Evaluation and Management of Chronic Kidney Disease},
+  journal = {Kidney International},
+  volume  = {105},
+  number  = {4S},
+  pages   = {S117--S314},
+  year    = {2024}
+}
+
+@misc{google2026structured,
+  author       = {{Google AI for Developers}},
+  title        = {Gemini {API} Documentation: Structured Output},
+  howpublished = {\url{https://ai.google.dev/gemini-api/docs/structured-output}},
+  year         = {2026}
 }

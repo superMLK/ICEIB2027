@@ -1,56 +1,246 @@
 % ==========================================
-% III. Proposed Scheme (~1.8 pages)
-% Logic: Architecture -> Mathematical model -> Algorithms
-% Key question: What is your innovation? How does it work?
+% III. Proposed Scheme (A2Z: PA-PM)
+% PA aim -> PB/PC design principles -> PD/PE/PG architecture ->
+% PF/PH budget, gate, ranking -> PI algorithms + flowchart -> PJ examples
 % ==========================================
 \section{Proposed Scheme}
 \label{sec:proposed_scheme}
 
-\subsection{System Architecture}
-Fig.~\ref{fig:architecture} shows the overall architecture of the proposed
-scheme, which consists of the sensing layer, the network layer, and the
-application layer.
-
-\begin{figure}[htbp]
+\begin{figure*}[t]
     \centering
-    % Replace the placeholder with your own figure, e.g.:
-    % \includegraphics[width=\columnwidth]{architecture.pdf}
-    \includegraphics[width=\columnwidth]{example-image-a}
-    \caption{Overall architecture of the proposed scheme.}
+    \input{figures/architecture}
+    \caption{System architecture of NutriAgent. The Planner (3) orchestrates
+    eight modules; the deterministic gate (6) runs before any LLM call, so
+    Gemini only sees the safe candidate pool.}
     \label{fig:architecture}
-\end{figure}
+\end{figure*}
 
-\subsection{Mathematical Model}
-Let $\mathcal{D} = \{(\mathbf{x}_i, y_i)\}_{i=1}^{N}$ denote the dataset,
-where $\mathbf{x}_i \in \mathbb{R}^{d}$ is the feature vector and $y_i$ is
-the target value. Each feature is normalized by min--max scaling:
-\begin{equation}
-    x' = \frac{x - x_{\min}}{x_{\max} - x_{\min}}.
-    \label{eq:minmax}
-\end{equation}
-The model $f_{\theta}$ is trained by minimizing the mean squared error:
-\begin{equation}
-    \theta^{*} = \arg\min_{\theta} \frac{1}{N} \sum_{i=1}^{N}
-    \left( y_i - f_{\theta}(\mathbf{x}_i) \right)^{2}.
-    \label{eq:objective}
-\end{equation}
+\subsection{Problem Formulation}
+Given a natural-language message $M$, health metrics $H$, a set of declared
+allergens $A$, a location $\ell$, a meal time $t$, and today's activity $x$,
+NutriAgent selects the top-3 meals from the walkable set $\mathcal{M}(\ell)$
+and replies in natural language, subject to four requirements:
+(i)~\emph{safety}---every recommended meal satisfies all clinical and allergen
+hard constraints, and no LLM output can change this;
+(ii)~\emph{numeric grounding}---every calorie, protein, sodium, price, and
+distance value in the reply matches the database;
+(iii)~\emph{nutritional fit and personalization}---meals approach an
+activity-aware meal budget and follow preferences such as ``something light'';
+and (iv)~\emph{resilience}---a safe recommendation is still produced when the
+LLM is unavailable.
 
-\subsection{Algorithm}
-Algorithm~\ref{alg:proposed} summarizes the procedure of the proposed scheme.
+\subsection{Design Principles}
+Five principles distilled from the clinical and behavioral literature shape the
+design. \emph{Safety is non-negotiable}: clinical contraindications and
+allergens are hard boundaries, not objectives to trade against
+preference~\cite{mohw2018allergen,yan2025ogsrl,vasantlal2026morla2c}.
+\emph{Pattern and quality over calories}: guidelines judge sodium, glycemic
+load, saturated fat, and potassium, not energy
+alone~\cite{jones2025hypertension,ada2026standards,kdigo2024ckd}.
+\emph{Adherence beats the theoretical optimum}: comparable diets yield similar
+outcomes, so the advice a user actually follows matters
+most~\cite{gardner2018dietfits,thaler2008nudge}.
+\emph{Energy balance is dynamic and noisy}: needs vary with activity, but
+wrist-worn energy estimates carry errors above
+30\%~\cite{hall2011energy,germini2022wearable,shcherbina2017wrist}.
+\emph{Context defines feasibility}: advice must fit the time, place, and form in
+which a user can act~\cite{lei2017actorcritic,svihrova2025bandits,lee2025pearl}.
 
-\begin{algorithm}[htbp]
-    \caption{Proposed Scheme}
-    \label{alg:proposed}
+\subsection{System Architecture}
+Fig.~\ref{fig:architecture} shows the architecture. A user asks in a chat
+interface (1); the message and the sidebar profile form the query (2). The
+Planner (3) parses the intent (recommend, feedback, or explain a rejection),
+overrides the location, meal time, and activity mentioned in the chat, and calls
+the tools in order. The data module (4) obtains activity data through an IoT
+adapter and retrieves nearby meals from the nutrition database (K1). The
+analytics engine (5) computes the meal budget and an 8-dimensional state $s_t$.
+The domain-knowledge gate (6) removes unsafe meals using the clinical rules (K2)
+and allergen aliases (K3). The decision module (7) ranks the safe pool with a
+local preference model and Gemini semantic scores, and the output module (8)
+produces a grounded reply and records feedback in the interaction memory (K4).
+The guiding split is that \emph{rules own safety and numbers, while the LLM
+owns understanding and expression}.
+
+\subsection{Activity-Aware Meal Budget}
+The basal metabolic rate follows the Mifflin--St~Jeor
+equation~\cite{mifflin1990bmr}. Because wearable energy estimates are
+unreliable~\cite{germini2022wearable}, only a damped share of the active energy
+$E_{\mathrm{act}}$ is added, and the budget of a meal is capped:
+\begin{align}
+    \mathrm{TDEE} &= \mathrm{BMR} + 0.65\,E_{\mathrm{act}}, \label{eq:tdee}\\
+    B_t &= \min\!\left(\rho_t \cdot \mathrm{TDEE},\ 900\ \mathrm{kcal}\right),
+    \label{eq:budget}
+\end{align}
+where $\rho_t$ is the share of the daily energy assigned to meal time $t$.
+Macronutrient targets are then adjusted by condition; for prediabetes, for
+example, the split is 35\% carbohydrate, 35\% protein, and 30\% fat.
+Before \eqref{eq:tdee} is applied, a cross-sensor plausibility check runs: more
+than 10{,}000 steps with a mean heart rate of at most 70\,bpm is treated as
+vehicle vibration and corrected, and if the wearable data cannot be obtained, a
+static estimate is used and the budget is flagged as low confidence
+(LOW\_CONF).
+
+Two examples illustrate the effect. After a marathon, a watch may report
+1{,}800\,kcal of activity; adding it one-to-one would push the dinner budget
+toward an oversized, oily meal, whereas \eqref{eq:tdee} adds 1{,}170\,kcal to
+the daily need and \eqref{eq:budget} still caps the dinner at 900\,kcal. When a
+phone vibrating in a car records 12{,}000 extra steps within an hour while the
+heart rate stays low, the plausibility check flags the data instead of raising
+the budget.
+
+\subsection{Clinical and Allergen Gate}
+Algorithm~\ref{alg:gate} filters the candidates before any LLM is involved.
+Declared allergens are expanded through an alias table covering the 11
+categories that Taiwan requires on food labels~\cite{mohw2018allergen}, so
+declaring ``seafood'' excludes both fish and crustaceans. A chat message may add
+allergens but never remove them. The sodium threshold of 700\,mg per meal is a
+design decision derived from the WHO limit of 2{,}000\,mg per
+day~\cite{who2025hypertension} divided over three meals and rounded up; it is
+not a guideline value. The chronic kidney disease (CKD) rule is deliberately
+more conservative than KDIGO 2024, which individualizes potassium
+intake~\cite{kdigo2024ckd}, because the system has no serum potassium data. If
+the safe pool is empty, the rules are never relaxed: the agent returns
+NO\_COMPLIANT\_MEAL with suggestions on how to order more safely.
+
+\begin{algorithm}[t]
+    \caption{Clinical and Allergen Hard-Constraint Gate}
+    \label{alg:gate}
     \begin{algorithmic}[1]
-        \Require Dataset $\mathcal{D}$, candidate hyperparameters $\Theta$
-        \Ensure Trained model $f_{\theta^{*}}$
-        \State Remove missing values and outliers from $\mathcal{D}$
-        \State Normalize $\mathcal{D}$ using \eqref{eq:minmax}
-        \State Split $\mathcal{D}$ into $\mathcal{D}_{\mathrm{train}}$ and $\mathcal{D}_{\mathrm{val}}$
-        \For{each $\theta \in \Theta$}
-            \State Train $f_{\theta}$ on $\mathcal{D}_{\mathrm{train}}$ by \eqref{eq:objective}
-            \State Evaluate $f_{\theta}$ on $\mathcal{D}_{\mathrm{val}}$
+        \Require candidates $C$, health metrics $H$, allergens $A$
+        \Ensure safe pool $S$, rejection log $V$
+        \State $S \gets \emptyset$, $V \gets \emptyset$
+        \State $\hat{A} \gets \bigcup_{a \in A} \mathrm{Alias}(a)$
+            \Comment{TFDA-11}
+        \For{each meal $m \in C$}
+            \State $R \gets \emptyset$
+            \If{$m.\mathit{allergens} \cap \hat{A} \neq \emptyset$}
+                \State $R \gets R \cup \{\textsc{Allergen}\}$
+            \EndIf
+            \If{$\mathit{SBP} \ge 130$ \textbf{or} $\mathit{DBP} \ge 85$}
+                \If{$m.\mathit{Na} > 700$\,mg \textbf{or} $m$ is deep-fried}
+                    \State $R \gets R \cup \{\textsc{HTN}\}$
+                \EndIf
+            \EndIf
+            \If{$\mathit{FPG} \ge 100$ \textbf{and}
+                ($m.\mathit{GI}$ high \textbf{or} $m.\mathit{sugar} > 5$\,g)}
+                \State $R \gets R \cup \{\textsc{Prediabetes}\}$
+            \EndIf
+            \If{$\mathit{UA} \ge 7.0$ \textbf{and} $m.\mathit{purine}$ high}
+                \State $R \gets R \cup \{\textsc{Gout}\}$
+            \EndIf
+            \If{$\mathit{LDL} \ge 130$ \textbf{and}
+                ($m.\mathit{satfat} > 5$\,g \textbf{or} fried)}
+                \State $R \gets R \cup \{\textsc{LDL}\}$
+            \EndIf
+            \If{$\mathit{eGFR} < 60$ \textbf{and}
+                ($m.\mathit{K}$ high \textbf{or} $m.\mathit{P}$ high)}
+                \State $R \gets R \cup \{\textsc{CKD}\}$
+            \EndIf
+            \If{$R = \emptyset$}
+                \State $S \gets S \cup \{m\}$
+            \Else
+                \State $V \gets V \cup \{(m, R)\}$
+            \EndIf
         \EndFor
-        \State \Return the model $f_{\theta^{*}}$ with the lowest validation error
+        \State \Return $S, V$
     \end{algorithmic}
 \end{algorithm}
+
+\subsection{Hybrid Ranking and Grounded Reply}
+Algorithm~\ref{alg:rank} ranks the safe pool $S$. A local preference score
+$p_m \in [0,1]$ combines flavor weights, protein density, calorie closeness,
+and keywords in $M$. When Gemini~2.5 Flash~\cite{gemini2025report} is
+available, it returns a semantic score $g_m \in [0,1]$ for each meal in JSON
+mode~\cite{google2026structured} at temperature~0.1. To reduce the position
+bias of LLM rankers~\cite{hou2024llmrank}, the candidates are shuffled and
+scored one by one rather than ranked. The scores are combined as
+\begin{align}
+    q_m &= 0.5\,p_m + 0.5\,g_m, \label{eq:hybrid}\\
+    \mathrm{score}_m &= 0.50\,q_m + 0.35\,\mathrm{fit}_m
+        - 0.15\min\!\left(1, d_m / 1.5\right), \label{eq:score}
+\end{align}
+where $q_m = p_m$ if no LLM score exists,
+$\mathrm{fit}_m = 1 - (0.6\,e^{\mathrm{kcal}}_m + 0.4\,e^{\mathrm{prot}}_m)$
+measures the calorie and protein error against the budget, and $d_m$ is the
+walking distance in km.
+
+The reply follows retrieval-augmented, tool-using
+patterns~\cite{lewis2020rag,yao2023react}: Gemini receives the verified data
+as JSON together with the last four turns, is instructed to quote every number
+verbatim, and generates at temperature~0.25. A deterministic template reply is
+always built first. The LLM reply replaces it only if every number it contains
+matches the database; a timeout (12\,s), an API error, or any mismatch keeps
+the template.
+
+\begin{algorithm}[t]
+    \caption{Hybrid LLM Ranking and Grounded Reply}
+    \label{alg:rank}
+    \begin{algorithmic}[1]
+        \Require safe pool $S$, state $s_t$, budget $B_t$, message $M$,
+            log $V$, history $\mathcal{H}$
+        \Ensure top-3 meals $R$, reply $Y$
+        \State $g \gets \emptyset$
+        \If{LLM available \textbf{and} $M \neq \varnothing$}
+            \State $g \gets \textsc{LLMScores}(\textsc{Shuffle}(S), B_t, M)$
+        \EndIf
+        \For{each meal $m \in S$}
+            \State $p_m \gets \textsc{LocalPref}(s_t, m, M)$
+            \State compute $q_m$ by \eqref{eq:hybrid} ($q_m \gets p_m$ if $m \notin g$)
+            \State compute $\mathrm{score}_m$ by \eqref{eq:score}
+        \EndFor
+        \State $R \gets$ top-3 meals of $S$ by $\mathrm{score}$
+        \State $Y \gets \textsc{TemplateReply}(R, H, B_t)$
+        \Comment{numbers from DB}
+        \If{LLM available}
+            \State $Y' \gets \textsc{LLMReply}(\mathrm{JSON}(R, V, B_t), \mathcal{H}_{-4:})$
+            \If{$Y' \neq \textsc{null}$ \textbf{and}
+                $\mathrm{Num}(Y') \subseteq \mathrm{DB}(R, B_t)$}
+                \State $Y \gets Y'$
+            \EndIf
+        \EndIf
+        \State \Return $R, Y$
+    \end{algorithmic}
+\end{algorithm}
+
+\subsection{Online Preference Update}
+The preference weights $w = (w_{\mathrm{light}}, w_{\mathrm{savory}},
+w_{\mathrm{protein}})$ are updated from feedback $f$ on the top meal. The
+reward and the update rule are
+\begin{equation}
+    r(f) =
+    \begin{cases}
+        +1.0, & f = \text{accept},\\
+        -0.6, & f = \text{too oily},\\
+        -0.2, & f = \text{skip},
+    \end{cases}
+    \label{eq:reward}
+\end{equation}
+\begin{align}
+    \text{accept:}\quad   & w \gets w + 0.08\,\mathbf{1}_{a}, \nonumber\\
+    \text{too oily:}\quad & w_{\mathrm{light}} \gets \min(1,\ w_{\mathrm{light}} + 0.12), \nonumber\\
+                          & w_{\mathrm{savory}} \gets \max(0.1,\ w_{\mathrm{savory}} - 0.15), \nonumber\\
+    \text{skip:}\quad     & w \gets \mathrm{clip}(0.95\,w,\ 0.1,\ 1), \label{eq:pref}
+\end{align}
+where $\mathbf{1}_{a}$ marks the flavors of the accepted meal (and protein if
+its protein ratio is at least 0.22). The transition $(s_t, a, r, s_{t+1}, f)$
+is stored in the interaction memory. This is a heuristic with fixed step sizes,
+not a gradient-trained model; it keeps the feedback--reward--update structure
+of contextual bandits~\cite{lei2017actorcritic}, and the stored transitions
+allow a learned bandit to be fitted offline later.
+
+\subsection{Processing Flow}
+Fig.~\ref{fig:flowchart} summarizes the agent loop. A feedback message such as
+``too oily'' first updates $w$ by \eqref{eq:pref} and then triggers a new
+recommendation. The exception paths keep the loop safe: missing wearable data
+leads to a static estimate, fewer than four candidates within 1.2\,km expands
+the search to 2.5\,km once, an empty safe pool returns NO\_COMPLIANT\_MEAL, an
+unavailable LLM leaves only the local model, and a numeric mismatch falls back
+to the template reply.
+
+\begin{figure}[t]
+    \centering
+    \input{figures/flowchart}
+    \caption{Processing flow of NutriAgent, including the human-in-the-loop
+    feedback and the exception paths.}
+    \label{fig:flowchart}
+\end{figure}
