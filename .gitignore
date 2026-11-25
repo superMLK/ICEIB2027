@@ -1,0 +1,19 @@
+# LaTeX 編譯產物
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.xdv
+*.pdf
+
+# olcli 本機同步狀態（每次 pull 都會變動）
+.olcli.json
+.olauth
+
+# macOS
+.DS_Store

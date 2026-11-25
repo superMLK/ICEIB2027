@@ -1,0 +1,219 @@
+% =====================================================================
+%  IEEE Conference Template（支援繁體中文）
+%  ---------------------------------------------------------------------
+%  編譯器：必須使用 XeLaTeX
+%    Overleaf → 左上角 Menu → Settings → Compiler → XeLaTeX
+%  參考文獻：寫在 refs.bib，用 \cite{key} 引用，格式由 IEEEtran.bst 產生
+%  圖片：放在 figures/ 資料夾，再把 example-image-a 換成你的檔名
+% =====================================================================
+\RequirePackage{iftex}
+\RequireXeTeX  % 沒切成 XeLaTeX 時，會直接報錯提醒你
+
+\documentclass[conference]{IEEEtran}
+% 期刊格式改成：\documentclass[journal]{IEEEtran}
+
+% ---------- 字型（英文 Times、中文思源宋體／黑體） ----------
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Termes}        % Times New Roman 的開源替代
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Serif CJK TC}   % 中文內文：思源宋體 繁中
+\setCJKsansfont{Noto Sans CJK TC}    % 中文無襯線：思源黑體 繁中
+\setCJKmonofont{Noto Sans Mono CJK TC}
+\xeCJKsetup{CJKecglue={\hskip 0.15em plus 0.05em minus 0.05em}} % 中英文之間的間距
+
+% ---------- 常用套件 ----------
+\usepackage{cite}                    % IEEE 風格的引用編號 [1]–[3]
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}             % IEEE 建議的演算法環境
+\usepackage{algorithm}
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{booktabs}                % 三線表 \toprule \midrule \bottomrule
+\usepackage{multirow}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}     % 可點擊的連結與交叉引用
+
+% 演算法標題改成中文的話取消註解：
+% \floatname{algorithm}{演算法}
+% \renewcommand{\algorithmicrequire}{\textbf{輸入：}}
+% \renewcommand{\algorithmicensure}{\textbf{輸出：}}
+
+\begin{document}
+
+% =====================================================================
+%  標題與作者
+% =====================================================================
+\title{論文標題：以物聯網感測資料進行○○分析與預測\\
+{\large Paper Title: IoT Sensor Data Analysis and Prediction for ○○}}
+
+\author{
+\IEEEauthorblockN{李偉聖}
+\IEEEauthorblockA{\textit{○○學系} \\
+\textit{國立中興大學}\\
+臺中市, 臺灣 \\
+email@example.com}
+\and
+\IEEEauthorblockN{第二作者}
+\IEEEauthorblockA{\textit{○○學系} \\
+\textit{國立中興大學}\\
+臺中市, 臺灣 \\
+email@example.com}
+}
+
+\maketitle
+
+% =====================================================================
+%  摘要與關鍵字
+% =====================================================================
+\begin{abstract}
+本文在此簡述研究動機、使用的方法、資料來源與主要結果。摘要建議控制在
+150 到 250 字之間，不放引用、圖表或公式。例如：本研究蒐集○○感測器的
+溫溼度資料，使用○○模型進行預測，實驗結果顯示 RMSE 為 ○○，比基準方法
+降低 ○○\%。
+\end{abstract}
+
+\begin{IEEEkeywords}
+物聯網, 感測資料分析, 機器學習, 時間序列預測
+\end{IEEEkeywords}
+
+% =====================================================================
+\section{Introduction（緒論）}
+\label{sec:intro}
+% =====================================================================
+說明研究背景與問題。物聯網（Internet of Things, IoT）讓大量裝置能夠互相連線
+並交換資料~\cite{atzori2010iot,gubbi2013iot}。接著寫出目前遇到的問題，以及
+本文想解決什麼。
+
+本文的主要貢獻如下：
+\begin{itemize}
+  \item 貢獻一：例如建置一套○○資料蒐集系統。
+  \item 貢獻二：例如提出○○分析方法。
+  \item 貢獻三：例如以實際資料驗證方法的效果。
+\end{itemize}
+
+本文其餘章節安排如下：第~\ref{sec:related}~節回顧相關研究，
+第~\ref{sec:system}~節介紹系統架構，第~\ref{sec:method}~節說明方法，
+第~\ref{sec:exp}~節呈現實驗結果，第~\ref{sec:conclusion}~節為結論。
+
+% =====================================================================
+\section{Related Work（相關研究）}
+\label{sec:related}
+% =====================================================================
+整理過去的研究，並說明本文與它們的差異。例如 Random Forest~\cite{breiman2001rf}
+常用於感測資料分類，實作上可使用 scikit-learn~\cite{pedregosa2011sklearn}。
+
+% =====================================================================
+\section{System Architecture（系統架構）}
+\label{sec:system}
+% =====================================================================
+描述整體系統，例如感測層、網路層與應用層。圖~\ref{fig:arch}~為系統架構圖。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\columnwidth]{example-image-a}
+  % 換成自己的圖：把檔案放進 figures/，例如 \includegraphics[width=\columnwidth]{architecture.png}
+  \caption{系統架構圖（單欄寬度）。}
+  \label{fig:arch}
+\end{figure}
+
+% =====================================================================
+\section{Methodology（研究方法）}
+\label{sec:method}
+% =====================================================================
+\subsection{資料前處理}
+說明資料清理、缺值處理與正規化。例如 Min-Max 正規化如式~\eqref{eq:minmax}：
+\begin{equation}
+  x' = \frac{x - x_{\min}}{x_{\max} - x_{\min}}
+  \label{eq:minmax}
+\end{equation}
+
+\subsection{模型與評估指標}
+模型預測誤差以均方根誤差（RMSE）衡量：
+\begin{equation}
+  \mathrm{RMSE} = \sqrt{\frac{1}{N}\sum_{i=1}^{N}\left(y_i - \hat{y}_i\right)^2}
+  \label{eq:rmse}
+\end{equation}
+其中 $y_i$ 為實際值，$\hat{y}_i$ 為預測值，$N$ 為樣本數。
+
+\subsection{演算法流程}
+完整流程如 Algorithm~\ref{alg:flow} 所示。
+
+\begin{algorithm}[htbp]
+  \caption{資料分析流程}
+  \label{alg:flow}
+  \begin{algorithmic}[1]
+    \REQUIRE 感測資料集 $D$
+    \ENSURE 訓練好的模型 $M$
+    \STATE 移除缺值與異常值
+    \STATE 依式~\eqref{eq:minmax} 正規化 $D$
+    \STATE 將 $D$ 切分為訓練集 $D_{train}$ 與測試集 $D_{test}$
+    \FOR{每組超參數 $\theta$}
+      \STATE 以 $D_{train}$ 訓練模型 $M_\theta$
+      \STATE 計算 $M_\theta$ 在驗證集上的 RMSE
+    \ENDFOR
+    \RETURN RMSE 最低的模型 $M$
+  \end{algorithmic}
+\end{algorithm}
+
+% =====================================================================
+\section{Experiments and Results（實驗與結果）}
+\label{sec:exp}
+% =====================================================================
+\subsection{實驗設定}
+說明資料來源、資料筆數、硬體環境與參數設定。
+
+\subsection{實驗結果}
+表~\ref{tab:result}~比較各方法的表現。
+
+\begin{table}[htbp]
+  \centering
+  \caption{各模型預測結果比較}
+  \label{tab:result}
+  \begin{tabular}{lccc}
+    \toprule
+    模型 & RMSE $\downarrow$ & MAE $\downarrow$ & $R^2$ $\uparrow$ \\
+    \midrule
+    Linear Regression & 0.00 & 0.00 & 0.00 \\
+    Random Forest     & 0.00 & 0.00 & 0.00 \\
+    本文方法          & \textbf{0.00} & \textbf{0.00} & \textbf{0.00} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+% 注意：IEEE 格式的表格標題放在表格「上方」，圖片標題放在圖片「下方」。
+
+圖~\ref{fig:result}~為跨雙欄的結果圖。
+
+\begin{figure*}[htbp]
+  \centering
+  \includegraphics[width=0.48\textwidth]{example-image-b}
+  \hfill
+  \includegraphics[width=0.48\textwidth]{example-image-c}
+  \caption{預測結果比較（跨雙欄寬度）：(左) 實際值與預測值；(右) 誤差分布。}
+  \label{fig:result}
+\end{figure*}
+
+% =====================================================================
+\section{Discussion（討論）}
+% =====================================================================
+分析結果背後的原因、方法的限制，以及可能的改進方向。
+
+% =====================================================================
+\section{Conclusion（結論）}
+\label{sec:conclusion}
+% =====================================================================
+總結本文的做法與主要發現，並提出未來工作。
+
+% =====================================================================
+\section*{Acknowledgment（致謝）}
+% =====================================================================
+感謝○○提供的資料與協助。
+
+% =====================================================================
+%  參考文獻（內容寫在 refs.bib）
+% =====================================================================
+\bibliographystyle{IEEEtran}
+\bibliography{refs}
+
+\end{document}
