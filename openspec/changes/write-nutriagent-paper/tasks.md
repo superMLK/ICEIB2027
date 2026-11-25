@@ -1,11 +1,11 @@
 # Tasks
 
-「編譯驗證」在本文件中指：`git commit` → `git pull overleaf master` → `git push overleaf main:master` → 請使用者在 Overleaf 按 Recompile 並回報 (1) 是否有錯誤、(2) Logs 中是否有 undefined reference/citation 或 Overfull 警告、(3) 目前頁數；三項都符合預期才算通過。
+「編譯驗證」在本文件中指：`olcli push` → `olcli pdf` → `olcli output log`，確認 log 中搜尋 `^!`、`undefined`、`Overfull` 都沒有結果，並檢查 PDF 的頁數與版面。
 
 ## 1. 準備工作
 
-- [ ] 1.0 確認使用者已在自己的終端機輸入 Overleaf Token（`GIT_TERMINAL_PROMPT=0 git fetch overleaf` 成功），再以 `git pull overleaf master --allow-unrelated-histories` 合併 Overleaf 既有歷史並 `git push overleaf main:master`；請使用者確認 Overleaf 仍能編譯模板
-- [x] 1.1 刪除 `.olignore`，在 `.gitignore` 加入 `.claude/`；驗證 `git status` 不再列出 `.claude/`，`git ls-files` 不含 `myRef/`、`.claude/`、`.olignore`
+- [x] 1.0 嘗試 Overleaf Git 整合（Overleaf 回應 `no git access`）後改用 olcli：重建 `.olignore` 排除 `myRef/`、`openspec/`、`.claude/`、`README.md`、`overleafInstruction.md`；驗證 `olcli push --dry-run --show-ignored` 的上傳清單只有論文原始檔
+- [x] 1.1 在 `.gitignore` 加入 `.claude/`；驗證 `git status` 不再列出 `.claude/`，`git ls-files` 不含 `myRef/`、`.claude/`
 - [x] 1.2 在 `main.tex` 更新標題與作者（Wei-Sheng Li、Huan Chen，NCHU CSE，`@example.com` 佔位），並加入 `tikz`（`positioning`、`arrows.meta`、`shapes.geometric`、`fit`、`calc`）與兩張圖共用的顏色和節點樣式；以編譯驗證確認第一頁的標題與作者正確
 
 ## 2. 參考文獻
@@ -30,5 +30,11 @@
 ## 5. 篇幅調整與整體檢查
 
 - [x] 5.1 依 design D1 的刪減順序把 PDF 調整到剛好 6 頁，並確認 Fig. 1 出現在第 2 頁頂端附近；編譯驗證並檢查頁數與最後一頁的內容量
-- [x] 5.2 依 4 個 spec 的 scenario 逐項檢查：全文無中文字元、無舊版技術描述、email 只有佔位、沒有 Deep Research 章節、`git ls-files` 符合同步範圍（以上由我用 grep 與 git 指令檢查），以及 Overleaf 編譯乾淨（由使用者回報）；把檢查結果整理給使用者
-- [ ] 5.3 確認所有變更都已 commit 並同步到 Overleaf（`git status` 乾淨、`git log overleaf/master` 與 `main` 一致）；接著詢問使用者是否 push 到 GitHub，取得同意後才 `git push origin main`
+- [x] 5.2 依 4 個 spec 的 scenario 逐項檢查：全文無中文字元、無舊版技術描述、email 只有佔位、沒有 Deep Research 章節、`git ls-files` 符合同步範圍、Overleaf 上傳清單（以上由我用 grep、git 與 `olcli push --dry-run` 檢查），以及編譯 log 乾淨；把檢查結果整理給使用者
+
+## 6. Article Summary Table
+
+- [x] 6.1 新增 `tables/summary.tex`：跨雙欄 `table*`，12 篇核心文獻（docx 3.3 節彙整表扣除 [12]、[31]）× 6 欄（Ref.、Year、AI Method、Domain / Dataset、Key Finding、Limitation），每列以 `\cite` 標示；刪除 `tables/related.tex`，並在 `sections/02_related_work.tex` 開頭引入新表；驗證表中每個數值都與 docx 3.3 節相同
+- [x] 6.2 刪減 `sections/02_related_work.tex` 中與表格重複的逐篇介紹，依 design D1 的刪減順序調整篇幅；編譯驗證，確認剛好 6 頁、log 乾淨、Article Summary Table 位於 Fig. 1 之後的頁面頂端且與 Fig. 1 不同頁
+- [x] 6.3 重跑 5.2 的全部檢查（無中文字元、無舊版內容、email 佔位、同步範圍、log 乾淨），並確認 32 篇文獻中被引用的條目都正確列出
+- [ ] 6.4 確認所有變更都已 commit 且 Overleaf 已同步到最新（`git status` 乾淨、最後一次 `olcli push` 成功）；接著詢問使用者是否 push 到 GitHub，取得同意後才 `git push origin main`

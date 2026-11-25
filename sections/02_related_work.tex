@@ -1,59 +1,50 @@
 % ==========================================
 % II. Related Work (A2Z: M-O)
-% M methods (old to new) -> N new trend -> O organize limitations (table)
+% M methods (old to new) -> N new trend -> O organize (article summary table)
 % Half AI technology (A, B), half domain knowledge (C, D).
+% Per-study details live in the full-width Table I, not in the prose.
 % ==========================================
 \section{Related Work}
 \label{sec:related_work}
 
 \subsection{LLM Agents and LLM-Based Ranking}
-ReAct interleaves reasoning with tool calls~\cite{yao2023react}, and
+Table~\ref{tab:summary} summarizes the core studies. ReAct interleaves reasoning with tool calls~\cite{yao2023react}, and
 retrieval-augmented generation grounds outputs in retrieved
 documents~\cite{lewis2020rag}; both let an LLM answer from data rather than
 from memory. Gemini~2.5 Flash adds a controllable thinking
 budget~\cite{gemini2025report}, and the Gemini API can return output that
 follows a JSON schema, which makes LLM results machine-verifiable
-\cite{google2026structured}. LLMs are also zero-shot rankers for
-recommendation, but their rankings depend on the order of candidates in the
-prompt and favor popular items~\cite{hou2024llmrank}.
+\cite{google2026structured}. LLM rankers, however, depend on the order of the
+candidates in the prompt~\cite{hou2024llmrank}.
+
+% Table I is defined here (on page 2) so that it floats to the top of page 3,
+% separate from Fig. 1.
+\input{tables/summary}
 
 \subsection{Health-Aware Food Recommendation}
-MOPI-HFRS balances preference, health, and nutritional diversity through graph
-learning and Pareto optimization, and explains results with an
-LLM~\cite{zhang2025mopihfrs}. MORL-A2C adds an actor-critic reranker that raises
-the health score H-Score@20 from 46.05\% to 69.57\% while Recall@20 drops from
-25.64\% to 23.61\%~\cite{vasantlal2026morla2c}: when health is a reward term,
-it is traded against accuracy. KERL grounds an LLM in a food knowledge graph~\cite{mohbat2025kerl}, and
-personal causal graphs help an LLM lower post-meal
-glucose~\cite{yang2025causalgraph}; all of these target recipes and offline
-evaluation rather than purchasable meals.
+Multi-objective recommenders balance preference and
+health~\cite{zhang2025mopihfrs}, but once health is a reward term it is traded
+against accuracy~\cite{vasantlal2026morla2c}. Knowledge graphs and causal graphs
+ground LLM reasoning~\cite{mohbat2025kerl,yang2025causalgraph}, yet all of these
+target recipes and offline evaluation rather than purchasable meals.
 
 \subsection{LLM Nutrition Estimation}
-NutriBench evaluates 12 LLMs on 11{,}857 meal descriptions and finds estimates
-close to those of dietitians~\cite{dhaliwal2025nutribench}. From images alone,
-however, calorie errors reach about 51\% MAPE and fall to about 29\% only with
-ingredient weights~\cite{bhatambarekar2025multimodal}. For eight Taiwanese
-convenience-store meal boxes, five chatbots underestimated sodium, with a
-coefficient of variation of 20--70\% across repeated
-queries~\cite{hsuan2025mealbox}, and no renal diet produced by three LLMs fully
-met the guidelines~\cite{aydincil2026renal}.
+Text-based LLM estimates approach those of
+dietitians~\cite{dhaliwal2025nutribench}, but image-based estimates remain
+coarse~\cite{bhatambarekar2025multimodal}, chatbots underestimate the sodium of
+Taiwanese meal boxes~\cite{hsuan2025mealbox}, and no LLM-generated renal diet
+fully met the guidelines~\cite{aydincil2026renal}.
 
 \subsection{Clinical Guidelines and Wearable Data}
-The 2025 AHA/ACC guideline recommends less than 2{,}300\,mg of sodium per day,
-ideally 1{,}500\,mg, with the DASH diet as first-line
-therapy~\cite{jones2025hypertension}; ADA 2026 places medical nutrition therapy
-at the core of diabetes care~\cite{ada2026standards}; the 2020 ACR guideline
-conditionally recommends limiting purines~\cite{fitzgerald2020gout}; and KDIGO
-2024 recommends less than 2\,g of sodium per day for CKD~\cite{kdigo2024ckd}.
-On the device side, wrist-worn trackers estimate energy expenditure with errors
-above 30\%~\cite{germini2022wearable,shcherbina2017wrist}, and the Google Fit
-APIs are being retired in 2026 in favor of Health
-Connect~\cite{android2025fitmigration}. In a randomized trial with 13{,}463
-participants, the contextual-bandit coach PEARL added 296 daily steps over the
-control group in the first month~\cite{lee2025pearl}.
+Guidelines set sodium below 2{,}300\,mg per day, ideally 1{,}500\,mg, for
+hypertension~\cite{jones2025hypertension}, center diabetes care on nutrition
+therapy~\cite{ada2026standards}, limit purines for gout~\cite{fitzgerald2020gout},
+and set sodium below 2\,g per day for CKD~\cite{kdigo2024ckd}.
+Wrist-worn energy estimates are unreliable~\cite{germini2022wearable,
+shcherbina2017wrist}, the Google Fit APIs are being retired in 2026 in favor of
+Health Connect~\cite{android2025fitmigration}, and contextual bandits can
+personalize mobile health at scale~\cite{lee2025pearl}.
 
-Table~\ref{tab:related} summarizes the gap: no existing approach lets rules
-own safety and numbers while an LLM owns language, combines live wearable
-activity with walkable, purchasable meals, and stays safe when the LLM fails.
-
-\input{tables/related}
+In short, no existing approach lets rules own safety and numbers while an LLM
+owns language, combines live wearable activity with walkable, purchasable
+meals, and stays safe when the LLM fails.

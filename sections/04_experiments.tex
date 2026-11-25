@@ -28,11 +28,9 @@ B4, an ablation of NutriAgent without the gate; and
 B5, NutriAgent offline, without any LLM, which measures what Gemini adds.
 
 \subsection{Evaluation Metrics}
-Table~\ref{tab:metrics} lists the ten metrics. The clinical violation rate (CVR)
-and the allergen violation rate (AVR) measure safety; the grounding rate is
-measured separately for the raw Gemini output and for the final reply;
-position consistency tests the shuffling strategy against
-position bias~\cite{hou2024llmrank}. A user study with 10--15 students and
+Table~\ref{tab:metrics} lists the ten metrics; the clinical and allergen
+violation rates (CVR, AVR) measure safety, and position consistency tests the
+shuffling against position bias~\cite{hou2024llmrank}. A user study with 10--15 students and
 office workers will use the system for the lunches of five working days,
 randomly assigned to a Gemini group or an offline group, followed by the System
 Usability Scale (SUS). The study evaluates usability only and involves no
@@ -55,9 +53,8 @@ Algorithm~\ref{alg:rank} is not yet implemented.
 
 With the full datasets, we expect CVR and AVR to remain 0\% with or without
 Gemini, provided that the nutrition labels are correct, because the LLM only
-sees the safe pool. We expect the final grounding rate to reach 100\% through
-the numeric check and the template fallback, and we will report the raw
-inconsistency rate of Gemini separately. We hypothesize that the zero-shot
+sees the safe pool. We expect a final grounding rate of 100\% through the numeric check and the
+template fallback. We hypothesize that the zero-shot
 baseline B3 will show non-zero violations, and we target a calorie MAE of at
 most 180\,kcal. These are hypotheses to be tested, not observed results.
 
@@ -78,6 +75,5 @@ one-to-one compensation, hence the damping and cap in \eqref{eq:tdee} and
 individualizes it~\cite{kdigo2024ckd}; without serum potassium data, NutriAgent
 keeps the conservative rule, at the cost of excluding some beneficial
 vegetables, and advises users to confirm their targets with a dietitian.
-Finally, the system is not a medical device, its guarantee assumes correct
-labels, and with Gemini enabled a production version should send only derived
-flags with explicit consent, while the offline mode keeps data on the device.
+Finally, the system is not a medical device, and a production version should
+send only derived health flags to the LLM, with consent.

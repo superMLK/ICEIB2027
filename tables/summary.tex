@@ -1,0 +1,64 @@
+% ==========================================
+% Article summary table (included at the start of sections/02_related_work.tex)
+% Full-width table*; content taken only from Section 3.3 of the proposal
+% (12 core studies; clinical guidelines [12] and [31] excluded).
+% ==========================================
+\begin{table*}[t]
+    \centering
+    \caption{Summary of Core Related Studies}
+    \label{tab:summary}
+    \scriptsize
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{@{}p{0.5cm}p{0.6cm}p{3.55cm}p{4.35cm}p{4.0cm}p{3.6cm}@{}}
+        \toprule
+        Ref. & Year & AI Method & Domain / Dataset & Key Finding & Limitation \\
+        \midrule
+        \multicolumn{6}{@{}l}{\textit{AI technology}} \\
+        \cite{zhang2025mopihfrs} & 2025 & graph learning, Pareto optimization, LLM
+            explanations & medical data, nutrition diversity; two self-built
+            benchmarks & outperforms baselines
+            on all three objectives & health is a soft objective; offline \\
+        \cite{vasantlal2026morla2c} & 2026 & A2C reinforcement-learning reranker
+            & macro/full-nutrient health score; MOPI-HFRS benchmark
+            & H-Score@20 46.05\%$\rightarrow$69.57\%; Recall@20
+            25.64\%$\rightarrow$23.61\% & health traded against accuracy; no
+            safety guarantee \\
+        \cite{mohbat2025kerl} & 2025 & KG subgraph retrieval + LLM
+            & food KG, dietary constraints; self-built recipe QA & outperforms existing methods & home
+            recipes, not purchasable meals \\
+        \cite{dhaliwal2025nutribench} & 2025 & 12 LLMs with chain-of-thought and
+            RAG & carb counting, insulin dosing; NutriBench (11{,}857) & close to dietitians and faster & estimation only, no
+            recommendation \\
+        \cite{lee2025pearl} & 2025 & contextual-bandit reinforcement learning
+            & behavior change, steps; RCT with 13{,}463 Fitbit users
+            & +296 steps/day in the first month & targets exercise, not diet \\
+        \cite{yang2025causalgraph} & 2025 & personal causal graph + LLM
+            & post-meal glucose; personal longitudinal data & lower post-meal glucose iAUC & needs long-term
+            data; simulated evaluation \\
+        \cite{yan2025ogsrl} & 2025 & offline guarded safe reinforcement
+            learning & physiological safety bounds; offline clinical data & near-optimal policy within constraints & treatment
+            decisions, not diet \\
+        \cite{bhatambarekar2025multimodal} & 2025 & 8 multimodal LLMs, agentic
+            self-questioning & ingredient weights, portions; Nutrition5k,
+            MetaFood3D & calorie MAPE about 51\%$\rightarrow$29\% with weights
+            & large errors for oil and sauces \\
+        \cite{hou2024llmrank} & 2024 & zero-shot LLM ranking, bootstrapping
+            & sequential recommendation; public datasets & zero-shot ranking
+            ability; position and popularity bias & not health-related;
+            repeated calls add cost \\
+        \midrule
+        \multicolumn{6}{@{}l}{\textit{Domain knowledge}} \\
+        \cite{hsuan2025mealbox} & 2025 & 5 chatbots vs.\ 4 dietitians
+            & Taiwanese nutrition labels; 8 7-Eleven meal boxes
+            & sodium underestimated; CV 20--70\% & only 8 samples \\
+        \cite{aydincil2026renal} & 2026 & ChatGPT-4o, Copilot, Gemini
+            (Turkish/English) & TUBER 2022, KDOQI; standard cases, expert
+            scoring & energy low; some potassium above limits; none fully
+            compliant & few scenarios; models
+            change quickly \\
+        \cite{germini2022wearable} & 2022 & systematic review & steps, heart
+            rate, energy; published validation studies & energy
+            expenditure MAPE $>$30\% & high heterogeneity \\
+        \bottomrule
+    \end{tabular}
+\end{table*}

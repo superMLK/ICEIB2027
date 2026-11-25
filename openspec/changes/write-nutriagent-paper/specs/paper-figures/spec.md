@@ -47,8 +47,19 @@
 - **THEN** 至少有 TDEE 與當餐預算、綜合分數、回饋獎勵與權重更新的編號公式
 
 ### Requirement: 表格
-論文 SHALL 包含以 `booktabs` 排版的表格，至少有：既有方法比較表、評估指標定義表、原型檢核結果表（含實作狀態）。表格標題 MUST 放在表格上方。
+論文 SHALL 包含以 `booktabs` 排版的表格，至少有：跨雙欄的 Article Summary Table、評估指標定義表、原型檢核結果表（含實作狀態）。表格標題 MUST 放在表格上方。
 
 #### Scenario: 表格格式
 - **WHEN** 檢視任何一張表
 - **THEN** 使用三線表，標題在上方，且沒有超出版面的 overfull 警告
+
+### Requirement: Article Summary Table
+Related Work SHALL 以跨雙欄（`table*`）的 Article Summary Table 整理 12 篇核心文獻（docx 3.3 節彙整表中除臨床指引 [12]、[31] 以外的文獻），欄位為 Ref.、Year、AI Method、Domain / Dataset、Key Finding、Limitation。表格中的數值與敘述 MUST 只取自 docx 3.3 節，每一列 MUST 以 `\cite` 標示文獻。此表取代原本的既有方法比較表。
+
+#### Scenario: 表格涵蓋 12 篇文獻
+- **WHEN** 檢視 Article Summary Table
+- **THEN** 表格跨雙欄，共 12 列，每列的 Ref. 欄是可對應文末參考文獻的 `\cite` 編號
+
+#### Scenario: 數值與 docx 一致
+- **WHEN** 表格列出數值（例如 H-Score@20 46.05%→69.57%、CV 20–70%、+296 步）
+- **THEN** 該數值與 docx 3.3 節彙整表相同
