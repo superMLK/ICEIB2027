@@ -37,4 +37,4 @@
 - [x] 6.1 新增 `tables/summary.tex`：跨雙欄 `table*`，12 篇核心文獻（docx 3.3 節彙整表扣除 [12]、[31]）× 6 欄（Ref.、Year、AI Method、Domain / Dataset、Key Finding、Limitation），每列以 `\cite` 標示；刪除 `tables/related.tex`，並在 `sections/02_related_work.tex` 開頭引入新表；驗證表中每個數值都與 docx 3.3 節相同
 - [x] 6.2 刪減 `sections/02_related_work.tex` 中與表格重複的逐篇介紹，依 design D1 的刪減順序調整篇幅；編譯驗證，確認剛好 6 頁、log 乾淨、Article Summary Table 位於 Fig. 1 之後的頁面頂端且與 Fig. 1 不同頁
 - [x] 6.3 重跑 5.2 的全部檢查（無中文字元、無舊版內容、email 佔位、同步範圍、log 乾淨），並確認 32 篇文獻中被引用的條目都正確列出
-- [ ] 6.4 確認所有變更都已 commit 且 Overleaf 已同步到最新（`git status` 乾淨、最後一次 `olcli push` 成功）；接著詢問使用者是否 push 到 GitHub，取得同意後才 `git push origin main`
+- [x] 6.4 確認所有變更都已 commit 且 Overleaf 已同步到最新（`git status` 乾淨、最後一次 `olcli push` 成功）；接著詢問使用者是否 push 到 GitHub，取得同意後才 `git push origin main`
