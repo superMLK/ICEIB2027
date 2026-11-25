@@ -17,3 +17,8 @@
 
 # macOS
 .DS_Store
+
+# 課程參考資料（不放進公開 repo）
+*.pptx
+*.docx
+myRef/
